@@ -1,6 +1,16 @@
 # Prerequisites
 *.d
 
+# Visual Studio Temp files
+*.suo
+*.db
+*.opendb
+*.tlog
+*.log
+*.idb
+*.pdb
+*.ilk
+
 # Compiled Object files
 *.slo
 *.lo
@@ -10,6 +20,7 @@
 # Precompiled Headers
 *.gch
 *.pch
+*.ipch
 
 # Compiled Dynamic libraries
 *.so
