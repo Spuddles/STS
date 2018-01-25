@@ -68,16 +68,16 @@ bool DataBase::insertProduct(Product p)
 
 	std::string sql = "INSERT INTO tblProducts (active, baseAsset, baseAssetName, baseAssetUnit) " //, decimalPlaces, matchingUnitType,"
 		//"minQty, minTrade, quoteAsset, quoteAssetName, quoteAssetUnit, status, symbol, tickSize, withdrawFee) "
-		"VALUES (?001, '?002', '?003', '?004')";
+		"VALUES (?, ?, 'Testing', '?')";
 
 	sqlite3_stmt *pStatement;
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
 	if (SQLITE_OK == retCode)
 	{
-		sqlite3_bind_int(pStatement, 1, p.isActive());
-		sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_STATIC);
-		sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_STATIC);
-		sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_STATIC);
+		retCode = sqlite3_bind_int(pStatement, 1, p.isActive());
+		retCode = sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
+		retCode = sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_STATIC);
+		retCode = sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_STATIC);
 /*		sqlite3_bind_int(pStatement, 5, p.getDecimalPlaces());
 		sqlite3_bind_int(pStatement, 6, p.getMatchingUnitType());
 		sqlite3_bind_int(pStatement, 7, p.getMinQty());
