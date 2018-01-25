@@ -15,19 +15,23 @@ public:
 
 	std::string	getBaseAsset() const { return m_baseAsset; }
 	void		setBaseAsset(std::string asset) { m_baseAsset = asset; }
+	void		setBaseAsset(const unsigned char *asset) { m_baseAsset = handleString(asset); }
 
 	std::string	getBaseAssetName() const { return m_baseAssetName; }
 	void		setBaseAssetName(std::string name) { m_baseAssetName = name; }
+	void		setBaseAssetName(const unsigned char *name) { m_baseAssetName = handleString(name); }
 
 	std::string	getBaseAssetUnit() const { return m_baseAssetUnit; }
 	void		setBaseAssetUnit(std::string unit) { m_baseAssetUnit = unit; }
-	
+	void		setBaseAssetUnit(const unsigned char *unit) { m_baseAssetUnit = handleString(unit); }
+
 	uint8_t		getDecimalPlaces() const { return m_decimalPlaces; }
 	void		setDecimalPlaces(uint8_t decimalPlaces) { m_decimalPlaces = decimalPlaces; }
 	
 	std::string	getMatchingUnitType() const { return m_matchingUnitType; }
 	void		setMatchingUnitType(std::string unitType) { m_matchingUnitType = unitType; }
-	
+	void		setMatchingUnitType(const unsigned char *unitType) { m_matchingUnitType = handleString(unitType); }
+
 	double		getMinQty() const { return m_minQty; }
 	void		setMinQty(double minQty) { m_minQty = minQty; }
 	
@@ -36,19 +40,24 @@ public:
 	
 	std::string	getQuoteAsset() const { return m_quoteAsset; }
 	void		setQuoteAsset(std::string asset) { m_quoteAsset = asset; }
-	
+	void		setQuoteAsset(const unsigned char *asset) { m_quoteAsset = handleString(asset); }
+
 	std::string getQuoteAssetName() const { return m_quoteAssetName; }
 	void		setQuoteAssetName(std::string name) { m_quoteAssetName = name; }
-	
+	void		setQuoteAssetName(const unsigned char *name) { m_quoteAssetName = handleString(name); }
+
 	std::string getQuoteAssetUnit() const { return m_quoteAssetUnit; }
 	void		setQuoteAssetUnit(std::string unit) { m_quoteAssetUnit = unit; }
-	
+	void		setQuoteAssetUnit(const unsigned char *unit) { m_quoteAssetUnit = handleString(unit); }
+
 	std::string	getStatus() const { return m_status; }
 	void		setStatus(std::string status) { m_status = status; }
-	
+	void		setStatus(const unsigned char *status) { m_status = handleString(status); }
+
 	std::string getSymbol() const { return m_symbol; }
 	void		setSymbol(std::string symbol) { m_symbol = symbol; }
-	
+	void		setSymbol(const unsigned char *symbol) { m_symbol = handleString(symbol); }
+
 	double		getTickSize() const { return m_tickSize; }
 	void		setTickSize(double tickSize) { m_tickSize = tickSize; }
 	
@@ -56,6 +65,9 @@ public:
 	void		setWithdrawFee(double withdrawFee) { m_withdrawFee = withdrawFee; }
 
 private:
+
+	std::string	handleString(const unsigned char* text);
+
 	uint32_t	m_id;
 	bool		m_active;
 	std::string	m_baseAsset;

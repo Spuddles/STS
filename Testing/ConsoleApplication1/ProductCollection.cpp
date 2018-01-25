@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "ProductCollection.h"
 
-ProductCollection::ProductCollection()
+ProductCollection::ProductCollection(DataBase *pDatabase):
+	m_pDatabase(pDatabase)
 {
 }
 
@@ -39,9 +40,13 @@ bool ProductCollection::loadFromDatabase(void *database)
 bool ProductCollection::addToDatabase(Product &product)
 {
 	// Write the product to the database
+	if (!m_pDatabase->insertProduct(product))
+	{
+		return false;
+	}
 
 	// Load the product so we can get the new id
-	return false;
+	return true;
 }
 
 bool ProductCollection::doesSymbolExist(std::string symbol)

@@ -1,11 +1,12 @@
 #pragma once
 #include "Product.h"
+#include "DataBase.h"
 #include <map>
 
 class ProductCollection
 {
 public:
-				ProductCollection();
+				ProductCollection(DataBase *pDatabase);
 	virtual		~ProductCollection();
 
 	bool		getProductID(std::string symbol, uint32_t &productID);
@@ -22,5 +23,7 @@ private:
 
 	// Map containing all the products
 	std::map<uint32_t, Product>		m_mapProducts;
+
+	DataBase	*m_pDatabase;
 };
 

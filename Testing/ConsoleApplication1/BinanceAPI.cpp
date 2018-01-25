@@ -104,6 +104,8 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 			p.setQuoteAsset(i["quoteAsset"]);
 			p.setStatus(i["status"]);
 
+			p.setSymbol(i["symbol"]);
+
 			std::string tickSize = (*it)["tickSize"];
 			p.setTickSize(atof(tickSize.c_str()));
 
@@ -120,16 +122,5 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 		}
 	}
 
-	/*
-	"active" - true
-	"baseAsset" - "ETH"
-	"decimalPlaces" - 8
-	"minQty" - "1E-8"
-	"minTrade" - "0.0001000"
-	"quoteAsset" - "USDT"
-	"status" - "TRADING"
-	"tickSize" - "0.01"
-	"withdrawFee" - "0"
-	*/
 	return true;
 }
