@@ -60,14 +60,49 @@ std::string BinanceAPI::convertTime(uint64_t &timestamp)
 	return std::string(buffer);
 }
 
-bool BinanceAPI::getPrices(std::vector<Price> &prices)
+bool BinanceAPI::getPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices)
 {
-	std::string symbol = "LTCBTC";
-	std::string interval = "1m";
-	unsigned int amount = 500;
-	std::string str = m_pRequests->getPrices(symbol, interval, amount);
+	std::string str = m_pRequests->getPrices(product, interval, amount);
 
-	return false;
+	if (str.empty())
+		return false;
+
+	//std::cout << str << std::endl;
+
+	try
+	{
+		json j = json::parse(str);
+
+		size_t items = j.size();
+
+		for (json::iterator it = j.begin(); it != j.end(); ++it)
+		{
+			Price price;
+			json &p = (*it);
+
+			price.setOpenTime(p[0]);
+			std::string openstr = p[1];
+			price.setOpen(atof(openstr.c_str()));
+			std::string highstr = p[2];
+			price.setHigh(atof(highstr.c_str()));
+			std::string lowstr = p[3];
+			price.setLow(atof(lowstr.c_str()));
+			std::string closestr = p[4];
+			price.setClose(atof(closestr.c_str()));
+			std::string volumestr = p[5];
+			price.setVolume(atof(volumestr.c_str()));
+			price.setCloseTime(p[6]);
+			price.setTrades(p[8]);
+
+			vecPrices.push_back(price);
+		}
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
 }
 
 bool BinanceAPI::getProducts(std::vector<Product> &products)
@@ -86,24 +121,29 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 	for (json::iterator it = jj.begin();it != jj.end();++it)
 	{
 		Product p;
-		//std::cout << it->dump(4) << std::endl;
 
 		json &i = (*it);
 
 		try
 		{
-			p.setActive(i["active"]);
+			p.setActive(i["active"]==1);
 			p.setBaseAsset(i["baseAsset"]);
+			p.setBaseAssetName(i["baseAssetName"]);
+			p.setBaseAssetUnit(i["baseAssetUnit"]);
+
 			p.setDecimalPlaces(i["decimalPlaces"]);
+
+			p.setMatchingUnitType(i["matchingUnitType"]);
 
 			std::string minQty = i["minQty"];
 			p.setMinQty(atof(minQty.c_str()));
-
 			std::string minTrade = i["minTrade"];
 			p.setMinTrade(atof(minTrade.c_str()));
-			p.setQuoteAsset(i["quoteAsset"]);
-			p.setStatus(i["status"]);
 
+			p.setQuoteAsset(i["quoteAsset"]);
+			p.setQuoteAssetName(i["quoteAssetName"]);
+			p.setQuoteAssetUnit(i["quoteAssetUnit"]);
+			p.setStatus(i["status"]);
 			p.setSymbol(i["symbol"]);
 
 			std::string tickSize = (*it)["tickSize"];

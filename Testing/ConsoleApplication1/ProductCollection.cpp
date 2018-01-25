@@ -31,7 +31,7 @@ bool ProductCollection::getProduct(std::string symbol, Product &product)
 	return false;
 }
 
-bool ProductCollection::loadFromDatabase(void *database)
+bool ProductCollection::loadFromDatabase()
 {
 	std::string sql = "SELECT STUFF FROM TBLPRODUCTS";
 	return false;

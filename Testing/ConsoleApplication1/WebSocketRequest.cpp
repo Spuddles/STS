@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "WebSocketRequest.h"
 #include <iostream>
+#include <sstream>
 
 WebSocketRequest::WebSocketRequest()
 {
@@ -50,7 +51,13 @@ std::string WebSocketRequest::getProducts()
 
 std::string WebSocketRequest::getPrices(std::string symbol, std::string interval, unsigned int amount)
 {
-	return request("");
+	std::stringstream ss;
+	ss << "https://www.binance.com/api/v1/klines?symbol=";
+	ss << symbol;
+	ss << "&interval=" << interval;
+	ss << "&limit=" << amount;
+
+	return request(ss.str());
 }
 
 size_t WebSocketRequest::WriteMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
@@ -81,6 +88,7 @@ std::string WebSocketRequest::request(std::string url)
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, WebSocketRequest::WriteMemoryCallbackStatic);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEDATA, (void *)this);
 	m_BufferOffset = 0;
+	memset(m_Buffer, -1, 200 * 1024);
 
 	CURLcode res = curl_easy_perform(m_pCurlHandle);
 
@@ -89,6 +97,9 @@ std::string WebSocketRequest::request(std::string url)
 	{
 		return "";
 	}
+
+	// NULL terminate
+	m_Buffer[m_BufferOffset] = 0;
 
 	std::cout << "Size of buffer = " << m_BufferOffset << std::endl;
 

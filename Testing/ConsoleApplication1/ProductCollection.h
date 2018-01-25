@@ -13,7 +13,7 @@ public:
 	bool		getProduct(uint32_t	productID, Product &product);
 	bool		getProduct(std::string symbol, Product &product);
 
-	bool		loadFromDatabase(void *database);
+	bool		loadFromDatabase();
 	bool		addToDatabase(Product &product);
 	bool		doesSymbolExist(std::string symbol);
 
