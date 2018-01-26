@@ -10,6 +10,7 @@
 *.idb
 *.pdb
 *.ilk
+*.enc
 
 # Compiled Object files
 *.slo
