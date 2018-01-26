@@ -126,7 +126,7 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 
 		try
 		{
-			p.setActive(i["active"]==1);
+			p.setActive(i["active"]);
 			p.setBaseAsset(i["baseAsset"]);
 			p.setBaseAssetName(i["baseAssetName"]);
 			p.setBaseAssetUnit(i["baseAssetUnit"]);

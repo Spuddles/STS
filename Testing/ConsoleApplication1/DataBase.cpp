@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DataBase.h"
 #include <string>
+#include <sstream>
 
 DataBase::DataBase():
 	m_pSQLiteDB(nullptr)
@@ -35,11 +36,40 @@ bool DataBase::getActiveProductCount(int &value)
 	return (getScaler(sql, value));
 }
 
+bool DataBase::doesProductExist(const std::string &symbol, bool &exists)
+{
+	std::stringstream ss;
+	
+	ss << "SELECT COUNT(*) FROM tblProducts WHERE symbol='";
+	ss << symbol << "'";
+
+	int iVal;
+	bool bRet = getScaler(ss.str(), iVal);
+	exists = (iVal > 0);
+	return bRet;
+}
+
 bool DataBase::clearActiveFlag()
 {
 	std::string sql = "UPDATE tblProducts SET active=0";
 
 	return (executeNonQuery(sql));
+}
+
+bool DataBase::deleteProducts()
+{
+	std::string sql = "DELETE FROM tblProducts";
+
+	return (executeNonQuery(sql));
+}
+
+bool DataBase::getProductID(const std::string &symbol, int &id)
+{
+	std::stringstream ss;
+	ss << "SELECT id FROM tblProducts WHERE symbol='";
+	ss << symbol << "'";
+
+	return (getScaler(ss.str(), id));
 }
 
 bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
@@ -58,7 +88,7 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 		while (retCode == SQLITE_ROW)
 		{
 			Product p;
-			p.setID(sqlite3_column_int(pStatement, 0));
+			p.setID(sqlite3_column_int64(pStatement, 0));
 			p.setActive( (sqlite3_column_int(pStatement, 1)==1) );
 			p.setBaseAsset(sqlite3_column_text(pStatement, 2));
 			p.setBaseAssetName(sqlite3_column_text(pStatement, 3));
@@ -96,10 +126,12 @@ bool DataBase::insertProduct(Product p)
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
 	if (SQLITE_OK == retCode)
 	{
-		retCode = sqlite3_bind_int(pStatement, 1, p.isActive());
-		retCode = sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
-		retCode = sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		retCode = sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
+		int active;
+		p.isActive() ? active = 1 : active = 0;
+		sqlite3_bind_int(pStatement, 1, active);
+		sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
 		sqlite3_bind_int(pStatement, 5, p.getDecimalPlaces());
 		sqlite3_bind_text(pStatement, 6, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
 		sqlite3_bind_double(pStatement, 7, p.getMinQty());
@@ -123,7 +155,6 @@ bool DataBase::insertProduct(Product p)
 		int id = (int)sqlite3_last_insert_rowid(m_pSQLiteDB);
 		p.setID(id);
 	}
-
 	return success;
 }
 
@@ -133,16 +164,21 @@ bool DataBase::updateProduct(const Product &p)
 
 	std::string sql = "UPDATE tblProducts SET active=?, baseAsset=?, baseAssetName=?, baseAssetUnit=?, decimalPlaces=?,"
 		"matchingUnitType=?,minQty=?, minTrade=?, quoteAsset=?, quoteAssetName=?, quoteAssetUnit=?, status=?, symbol=?,"
-		"tickSize=?, withdrawFee=?) WHERE id=?";
+		"tickSize=?, withdrawFee=? WHERE id=?";
 
 	sqlite3_stmt *pStatement;
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
 	if (SQLITE_OK == retCode)
 	{
-		retCode = sqlite3_bind_int(pStatement, 1, p.isActive());
-		retCode = sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
-		retCode = sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		retCode = sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
+		std::string testing = "TESTING";
+
+		int active;
+		p.isActive() ? active = 1 : active = 0;
+		sqlite3_bind_int(pStatement, 1, active);
+		sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 4, testing.c_str(), -1, SQLITE_TRANSIENT);
+//		sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
 		sqlite3_bind_int(pStatement, 5, p.getDecimalPlaces());
 		sqlite3_bind_text(pStatement, 6, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
 		sqlite3_bind_double(pStatement, 7, p.getMinQty());
@@ -218,7 +254,7 @@ bool DataBase::getScaler(const std::string &sql, int &retValue)
 		retCode = sqlite3_step(pStatement);
 		if (retCode == SQLITE_ROW)
 		{
-			retValue = sqlite3_column_int(pStatement, 1);
+			retValue = sqlite3_column_int(pStatement, 0);
 			success = true;
 		}
 		sqlite3_finalize(pStatement);
@@ -237,7 +273,7 @@ bool DataBase::getScaler64(const std::string &sql, int64_t &retValue)
 		retCode = sqlite3_step(pStatement);
 		if (retCode == SQLITE_ROW)
 		{
-			retValue = sqlite3_column_int64(pStatement, 1);
+			retValue = sqlite3_column_int64(pStatement, 0);
 			success = true;
 		}
 		sqlite3_finalize(pStatement);

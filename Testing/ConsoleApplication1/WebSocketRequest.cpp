@@ -82,7 +82,9 @@ void WebSocketRequest::writeMemoryCallback(void *contents, size_t size, size_t n
 	// Check to make sure we haven't grown too big for the buffer
 	if (m_BufferSize < (m_BufferOffset + realsize))
 	{
-		char *newBuffer = new char[m_BufferSize * 2];
+		m_BufferSize = (m_BufferOffset + realsize) * 2;
+
+		char *newBuffer = new char[m_BufferSize];
 		memcpy(newBuffer, m_pBuffer, m_BufferOffset);
 		delete m_pBuffer;
 		m_pBuffer = newBuffer;

@@ -16,10 +16,13 @@ public:
 	// PRODUCTS
 	bool	getProductCount(int &value);
 	bool	getActiveProductCount(int &value);
+	bool	deleteProducts();
 	bool	clearActiveFlag();
 	bool	getAllProducts(std::vector<Product> &vecProducts);
 	bool	insertProduct(Product p);
 	bool	updateProduct(const Product &p);
+	bool	doesProductExist(const std::string &symbol, bool &exists);
+	bool	getProductID(const std::string &symbol, int &id);
 
 	// PRICES
 	bool	insertPrice(int id, Price &price);
