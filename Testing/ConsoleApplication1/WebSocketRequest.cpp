@@ -5,18 +5,24 @@
 
 WebSocketRequest::WebSocketRequest()
 {
+	// Initialise CURL library
 	curl_global_init(CURL_GLOBAL_ALL);
-	std::cout << "Curl version:" << curl_version() << std::endl;
+	//std::cout << "Curl version:" << curl_version() << std::endl;
 	m_pCurlHandle = curl_easy_init();
+
+	// Create memory buffer for request
+	m_BufferSize = 1024;
+	m_pBuffer = new char[m_BufferSize];
 }
 
 WebSocketRequest::~WebSocketRequest()
 {
-	/* cleanup curl stuff */
+	// cleanup curl stuff
 	curl_easy_cleanup(m_pCurlHandle);
-
-	/* we're done with libcurl, so clean it up */
 	curl_global_cleanup();
+
+	// Free the request buffer
+	delete m_pBuffer;
 }
 
 std::string WebSocketRequest::ping()
@@ -29,7 +35,7 @@ std::string WebSocketRequest::getTime()
 	return request("https://api.binance.com/api/v1/time");
 }
 
-std::string WebSocketRequest::getMarketDepth(std::string pair, unsigned int depth)
+std::string WebSocketRequest::getMarketDepth(const std::string &pair, unsigned int depth)
 {
 	return request("https://api.binance.com/api/v1/depth?symbol=LTCBTC&limit=5");
 }
@@ -49,7 +55,7 @@ std::string WebSocketRequest::getProducts()
 	return request("https://www.binance.com/exchange/public/product");
 }
 
-std::string WebSocketRequest::getPrices(std::string symbol, std::string interval, unsigned int amount)
+std::string WebSocketRequest::getPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
 {
 	std::stringstream ss;
 	ss << "https://www.binance.com/api/v1/klines?symbol=";
@@ -60,48 +66,55 @@ std::string WebSocketRequest::getPrices(std::string symbol, std::string interval
 	return request(ss.str());
 }
 
-size_t WebSocketRequest::WriteMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
+size_t WebSocketRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	WebSocketRequest *pObject = (WebSocketRequest*)userp;
 
-	pObject->WriteMemoryCallback(contents, size, nmemb);
+	pObject->writeMemoryCallback(contents, size, nmemb);
 
 	return size * nmemb;
 }
 
-void WebSocketRequest::WriteMemoryCallback(void *contents, size_t size, size_t nmemb)
+void WebSocketRequest::writeMemoryCallback(void *contents, size_t size, size_t nmemb)
 {
 	size_t realsize = size * nmemb;
 
+	// Check to make sure we haven't grown too big for the buffer
+	if (m_BufferSize < (m_BufferOffset + realsize))
+	{
+		char *newBuffer = new char[m_BufferSize * 2];
+		memcpy(newBuffer, m_pBuffer, m_BufferOffset);
+		delete m_pBuffer;
+		m_pBuffer = newBuffer;
+	}
+
 	// Copy data to our buffer
-	memcpy(m_Buffer + m_BufferOffset, contents, realsize);
+	memcpy(m_pBuffer + m_BufferOffset, contents, realsize);
 
 	m_BufferOffset += realsize;
 
 	return;
 }
 
-std::string WebSocketRequest::request(std::string url)
+std::string WebSocketRequest::request(const std::string &url)
 {
 //	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, WebSocketRequest::WriteMemoryCallbackStatic);
+	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, WebSocketRequest::writeMemoryCallbackStatic);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEDATA, (void *)this);
 	m_BufferOffset = 0;
-	memset(m_Buffer, -1, 200 * 1024);
 
 	CURLcode res = curl_easy_perform(m_pCurlHandle);
 
-	/* check for errors */
 	if (res != CURLE_OK)
 	{
 		return "";
 	}
 
 	// NULL terminate
-	m_Buffer[m_BufferOffset] = 0;
+	m_pBuffer[m_BufferOffset] = 0;
 
 	std::cout << "Size of buffer = " << m_BufferOffset << std::endl;
 
-	return std::string(m_Buffer);
+	return std::string(m_pBuffer);
 }

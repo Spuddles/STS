@@ -5,16 +5,16 @@
 class FileRequest : public IRequests
 {
 public:
-	FileRequest(const std::string &path);
-	virtual ~FileRequest();
+				FileRequest(const std::string &path);
+	virtual		~FileRequest();
 
 	std::string	ping();
 	std::string	getTime();
-	std::string	getMarketDepth(std::string pair, unsigned int depth);
+	std::string	getMarketDepth(const std::string &pair, unsigned int depth);
 	std::string	getPairsPricesVolume();
 	std::string	getPairsPrices();
 	std::string	getProducts();
-	std::string getPrices(std::string symbol, std::string interval, unsigned int amount);
+	std::string getPrices(const std::string &symbol, const std::string &interval, unsigned int amount);
 
 private:
 	std::string m_Path;

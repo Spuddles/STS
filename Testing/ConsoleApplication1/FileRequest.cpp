@@ -22,7 +22,7 @@ std::string	FileRequest::getTime()
 	return "{\"serverTime\":1516135424195}"; // Jan 16 2017 20:44
 }
 
-std::string	FileRequest::getMarketDepth(std::string pair, unsigned int depth)
+std::string	FileRequest::getMarketDepth(const std::string &pair, unsigned int depth)
 {
 	return "";
 }
@@ -42,7 +42,7 @@ std::string	FileRequest::getProducts()
 	return loadFile("allProducts.json");
 }
 
-std::string FileRequest::getPrices(std::string symbol, std::string interval, unsigned int amount)
+std::string FileRequest::getPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
 {
 	return loadFile("prices.json");
 }
