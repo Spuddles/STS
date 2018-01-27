@@ -42,3 +42,7 @@
 *.exe
 *.out
 *.app
+
+# sqlite3
+*.sqlite
+*.sqlite-journal

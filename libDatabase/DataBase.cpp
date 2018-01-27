@@ -17,7 +17,7 @@ DataBase::~DataBase()
 
 bool DataBase::connect()
 {
-	int retCode = sqlite3_open("C:\\Users\\Spud\\OneDrive\\Trading\\Testing.sqlite", &m_pSQLiteDB);
+	int retCode = sqlite3_open("Trading.sqlite", &m_pSQLiteDB);
 	return (retCode == SQLITE_OK);
 }
 
@@ -200,7 +200,7 @@ bool DataBase::updateProduct(const Product &p)
 
 bool DataBase::getNextUpdateTime(int64_t &value)
 {
-	std::string sql = "select MAX(openTime) AS mot from tblOneMinutePrices2 GROUP BY ID ORDER BY mot";
+	std::string sql = "select MAX(openTime) AS mot from tblOneMinutePrices GROUP BY ID ORDER BY mot";
 
 	return (getScaler64(sql, value));
 }
@@ -209,7 +209,7 @@ bool DataBase::insertPrice(int id, Price &price)
 {
 	bool success = false;
 
-	std::string sql = "INSERT INTO tblOneMinutePrices2 (id, openTime, open, high, low, close,"
+	std::string sql = "INSERT INTO tblOneMinutePrices (id, openTime, open, high, low, close,"
 		"volume, closeTime, trades) "
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
