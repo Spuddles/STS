@@ -11,6 +11,9 @@
 *.pdb
 *.ilk
 *.enc
+*.iobj
+*.ipdb
+*.user
 
 # Compiled Object files
 *.slo

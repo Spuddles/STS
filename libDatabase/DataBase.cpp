@@ -18,7 +18,11 @@ DataBase::~DataBase()
 bool DataBase::connect()
 {
 	int retCode = sqlite3_open("Trading.sqlite", &m_pSQLiteDB);
-	return (retCode == SQLITE_OK);
+	if (retCode != SQLITE_OK)
+		return false;
+
+	// Set some options to speed up inserts
+	return setPragma("journal_mode", "MEMORY");
 }
 
 bool DataBase::getProductCount(int &value)
@@ -234,8 +238,26 @@ bool DataBase::insertPrice(int id, Price &price)
 		}
 		sqlite3_finalize(pStatement);
 	}
-
 	return success;
+}
+
+bool DataBase::verifyUploads(int &broken)
+{
+	broken = 0;
+	std::string sql = "select count(*) FROM ("
+						"select count(*) AS ACTUAL,"
+						"max(openTime) AS LAST,"
+						"min(openTime) AS FIRST,"
+						"((max(OpenTime) - min(openTime)) / 60000) + 1 AS EXPECTED "
+						"FROM tblOneMinutePrices "
+						"GROUP BY ID) "
+					  "WHERE ACTUAL != EXPECTED";
+
+	if (!getScaler(sql, broken))
+	{
+		return false;
+	}
+	return (broken == 0);
 }
 
 
@@ -287,6 +309,29 @@ bool DataBase::executeNonQuery(const std::string &sql)
 	{
 		retCode = sqlite3_step(pStatement);
 		if (retCode == SQLITE_DONE)
+		{
+			success = true;
+		}
+		sqlite3_finalize(pStatement);
+	}
+	return success;
+}
+
+bool DataBase::setPragma(const std::string &pragma, const std::string &value)
+{
+	bool		  success = false;
+
+	std::stringstream ss;
+
+	ss << "PRAGMA " << pragma << " = " << value;
+
+	sqlite3_stmt *pStatement;
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, ss.str().c_str(), (int)ss.str().size(), &pStatement, nullptr);
+
+	if (retCode == SQLITE_OK)
+	{
+		retCode = sqlite3_step(pStatement);
+		if (retCode == SQLITE_DONE || retCode == SQLITE_ROW)
 		{
 			success = true;
 		}

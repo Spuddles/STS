@@ -27,11 +27,13 @@ public:
 	// PRICES
 	bool	insertPrice(int id, Price &price);
 	bool	getNextUpdateTime(int64_t &value);
+	bool	verifyUploads(int &broken);
 
 private:
 	bool	getScaler(const std::string &sql, int &retValue);
 	bool	getScaler64(const std::string &sql, int64_t &retValue);
 	bool	executeNonQuery(const std::string &sql);
+	bool	setPragma(const std::string &pragma, const std::string &value);
 
 	sqlite3	*m_pSQLiteDB;
 };
