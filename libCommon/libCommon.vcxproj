@@ -50,6 +50,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -68,12 +69,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BollingerBand.cpp" />
+    <ClCompile Include="MovingAverage.cpp" />
     <ClCompile Include="Price.cpp" />
     <ClCompile Include="Product.cpp" />
+    <ClCompile Include="Variance.cpp" />
+    <ClCompile Include="WeightedMovingAverage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BollingerBand.h" />
+    <ClInclude Include="MovingAverage.h" />
     <ClInclude Include="Price.h" />
     <ClInclude Include="Product.h" />
+    <ClInclude Include="Variance.h" />
+    <ClInclude Include="WeightedMovingAverage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

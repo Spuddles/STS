@@ -28,6 +28,7 @@ public:
 	bool	insertPrice(int id, Price &price);
 	bool	getNextUpdateTime(int64_t &value);
 	bool	verifyUploads(int &broken);
+	bool	getPriceData(int id, std::vector<Price> &vecPrices);
 
 private:
 	bool	getScaler(const std::string &sql, int &retValue);

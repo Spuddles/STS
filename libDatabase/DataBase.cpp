@@ -241,6 +241,41 @@ bool DataBase::insertPrice(int id, Price &price)
 	return success;
 }
 
+bool DataBase::getPriceData(int id, std::vector<Price> &vecPrices)
+{
+	bool success = false;
+
+	sqlite3_stmt *pStatement;
+	std::string sql = "SELECT openTime, open, high, low, close, volume, closeTime, trades "
+		"FROM tblOneMinutePrices WHERE id=? ORDER BY openTime ASC";
+
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+	if (retCode == SQLITE_OK)
+	{
+		sqlite3_bind_int(pStatement, 1, id);
+
+		retCode = sqlite3_step(pStatement);
+		while (retCode == SQLITE_ROW)
+		{
+			Price p;
+			p.setOpenTime(sqlite3_column_int64(pStatement, 0));
+			p.setOpen(sqlite3_column_double(pStatement, 1));
+			p.setHigh(sqlite3_column_double(pStatement, 2));
+			p.setLow(sqlite3_column_double(pStatement, 3));
+			p.setClose(sqlite3_column_double(pStatement, 4));
+			p.setVolume(sqlite3_column_double(pStatement, 5));
+			p.setCloseTime(sqlite3_column_int64(pStatement, 6));
+			p.setTrades(sqlite3_column_int(pStatement, 7));
+
+			vecPrices.push_back(p);
+			retCode = sqlite3_step(pStatement);
+		}
+		sqlite3_finalize(pStatement);
+		success = true;
+	}
+	return success;
+}
+
 bool DataBase::verifyUploads(int &broken)
 {
 	broken = 0;

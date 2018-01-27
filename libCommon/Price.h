@@ -31,6 +31,8 @@ public:
 	uint64_t	getTrades() { return m_trades; }
 	void		setTrades(uint64_t trades) { m_trades = trades; }
 
+	double		getMid() { return (m_open + m_close) / 2.0; }
+
 private:
 	uint64_t	m_openTime;
 	double		m_open;
