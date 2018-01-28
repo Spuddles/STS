@@ -52,6 +52,7 @@
       <AdditionalIncludeDirectories>..\libCommon;..\ThirdParty\libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>

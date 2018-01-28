@@ -22,7 +22,9 @@ bool DataBase::connect()
 		return false;
 
 	// Set some options to speed up inserts
-	return setPragma("journal_mode", "MEMORY");
+	bool bRet = setPragma("journal_mode", "MEMORY");
+	bRet &= setPragma("synchronous", "OFF");
+	return bRet;
 }
 
 bool DataBase::getProductCount(int &value)
