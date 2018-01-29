@@ -70,7 +70,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BollingerBand.cpp" />
+    <ClCompile Include="Exchange.cpp" />
     <ClCompile Include="MovingAverage.cpp" />
+    <ClCompile Include="Portfolio.cpp" />
     <ClCompile Include="Price.cpp" />
     <ClCompile Include="Product.cpp" />
     <ClCompile Include="Variance.cpp" />
@@ -78,7 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BollingerBand.h" />
+    <ClInclude Include="Exchange.h" />
     <ClInclude Include="MovingAverage.h" />
+    <ClInclude Include="Orders.h" />
+    <ClInclude Include="Portfolio.h" />
     <ClInclude Include="Price.h" />
     <ClInclude Include="Product.h" />
     <ClInclude Include="Variance.h" />

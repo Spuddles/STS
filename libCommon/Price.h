@@ -7,31 +7,31 @@ public:
 				Price();
 	virtual		~Price();
 
-	uint64_t	getOpenTime() { return m_openTime; }
+	uint64_t	getOpenTime() const { return m_openTime; }
 	void		setOpenTime(uint64_t time) { m_openTime = time; }
 
-	double		getOpen() { return m_open; }
+	double		getOpen() const { return m_open; }
 	void		setOpen(double open) { m_open = open; }
 
-	double		getHigh() { return m_high; }
+	double		getHigh() const { return m_high; }
 	void		setHigh(double high) { m_high = high; }
 
-	double		getLow() { return m_low; }
+	double		getLow() const { return m_low; }
 	void		setLow(double low) { m_low = low; }
 
-	double		getClose() { return m_close; }
+	double		getClose() const { return m_close; }
 	void		setClose(double close) { m_close = close; }
 
-	double		getVolume() { return m_volume; }
+	double		getVolume() const { return m_volume; }
 	void		setVolume(double volume) { m_volume = volume; }
 
-	uint64_t	getCloseTime() { return m_closeTime; }
+	uint64_t	getCloseTime() const { return m_closeTime; }
 	void		setCloseTime(uint64_t time) { m_closeTime = time; }
 
-	uint64_t	getTrades() { return m_trades; }
+	uint64_t	getTrades() const { return m_trades; }
 	void		setTrades(uint64_t trades) { m_trades = trades; }
 
-	double		getMid() { return (m_open + m_close) / 2.0; }
+	double		getMid() const { return (m_open + m_close) / 2.0; }
 
 private:
 	uint64_t	m_openTime;
