@@ -25,6 +25,9 @@ public:
 	void		setBaseAssetUnit(const std::string &unit) { m_baseAssetUnit = unit; }
 	void		setBaseAssetUnit(const unsigned char *unit) { m_baseAssetUnit = handleString(unit); }
 
+	unsigned int getBaseCoin() { return m_baseCoin; }
+	void		 setBaseCoin(unsigned int coin) { m_baseCoin = coin; }
+
 	uint8_t		getDecimalPlaces() const { return m_decimalPlaces; }
 	void		setDecimalPlaces(uint8_t decimalPlaces) { m_decimalPlaces = decimalPlaces; }
 	
@@ -50,6 +53,9 @@ public:
 	void		setQuoteAssetUnit(const std::string &unit) { m_quoteAssetUnit = unit; }
 	void		setQuoteAssetUnit(const unsigned char *unit) { m_quoteAssetUnit = handleString(unit); }
 
+	unsigned int getQuoteCoin() const { return m_quoteCoin; }
+	void		 setQuoteCoin(unsigned int coin) { m_quoteCoin = coin; }
+
 	std::string	getStatus() const { return m_status; }
 	void		setStatus(const std::string &status) { m_status = status; }
 	void		setStatus(const unsigned char *status) { m_status = handleString(status); }
@@ -68,21 +74,23 @@ private:
 
 	std::string	handleString(const unsigned char* text);
 
-	uint32_t	m_id;
-	bool		m_active;
-	std::string	m_baseAsset;
-	std::string m_baseAssetName;
-	std::string m_baseAssetUnit;
-	uint8_t		m_decimalPlaces;
-	std::string m_matchingUnitType;
-	double		m_minQty;
-	double		m_minTrade;
-	std::string	m_quoteAsset;
-	std::string m_quoteAssetName;
-	std::string m_quoteAssetUnit;
-	std::string	m_status;
-	std::string m_symbol;
-	double		m_tickSize;
-	double		m_withdrawFee;
+	uint32_t		m_id;
+	bool			m_active;
+	std::string		m_baseAsset;
+	std::string		m_baseAssetName;
+	std::string		m_baseAssetUnit;
+	unsigned int	m_baseCoin;
+	uint8_t			m_decimalPlaces;
+	std::string		m_matchingUnitType;
+	double			m_minQty;
+	double			m_minTrade;
+	std::string		m_quoteAsset;
+	std::string		m_quoteAssetName;
+	std::string		m_quoteAssetUnit;
+	unsigned int	m_quoteCoin;
+	std::string		m_status;
+	std::string		m_symbol;
+	double			m_tickSize;
+	double			m_withdrawFee;
 };
 

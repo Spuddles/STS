@@ -27,6 +27,108 @@ bool DataBase::connect()
 	return bRet;
 }
 
+bool DataBase::insertCoin(const std::string &name, const std::string &description, const std::string &token)
+{
+	bool success = false;
+	std::string sql = "INSERT INTO tblCoins (name, description, token) VALUES (?,?,?)";
+
+	sqlite3_stmt *pStatement;
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+	if (SQLITE_OK == retCode)
+	{
+		sqlite3_bind_text(pStatement, 1, name.c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 2, description.c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 3, token.c_str(), -1, SQLITE_TRANSIENT);
+
+		retCode = sqlite3_step(pStatement);
+		if (retCode == SQLITE_DONE)
+		{
+			success = true;
+		}
+		sqlite3_finalize(pStatement);
+	}
+	return success;
+}
+
+bool DataBase::updateCoin(const Coin &c)
+{
+	bool success = false;
+	std::string sql = "UPDATE tblCoins SET name=?, description=?, token=? WHERE id=?";
+
+	sqlite3_stmt *pStatement;
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+	if (SQLITE_OK == retCode)
+	{
+		sqlite3_bind_text(pStatement, 1, c.getName().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 2, c.getDescription().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 3, c.getToken().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_int( pStatement, 3, c.getID());
+
+		retCode = sqlite3_step(pStatement);
+		if (retCode == SQLITE_DONE)
+		{
+			success = true;
+		}
+		sqlite3_finalize(pStatement);
+	}
+	return success;
+}
+
+bool DataBase::doesCoinExist(const std::string &name, bool &bExists)
+{
+	std::stringstream ss;
+
+	ss << "SELECT COUNT(*) FROM tblCoins WHERE name = '";
+	ss << name << "'";
+
+	int iVal;
+	bool bRet = getScaler(ss.str(), iVal);
+	bExists = (iVal > 0);
+	return bRet;
+}
+
+bool DataBase::getAllCoins(std::vector<Coin> &vecCoins)
+{
+	bool		  success = false;
+	sqlite3_stmt *pStatement;
+	std::string sql = "SELECT id, name, description, token FROM tblCoins";
+
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+
+	if (retCode == SQLITE_OK)
+	{
+		retCode = sqlite3_step(pStatement);
+		while (retCode == SQLITE_ROW)
+		{
+			unsigned int	id = sqlite3_column_int(pStatement, 0);
+			const char*		name = (const char*)sqlite3_column_text(pStatement, 1);
+			const char*		description = (const char*)sqlite3_column_text(pStatement, 2);
+			const char*		token = (const char*)sqlite3_column_text(pStatement, 3);
+
+			Coin c(id, name, description, token);
+			vecCoins.push_back(c);
+			retCode = sqlite3_step(pStatement);
+		}
+		sqlite3_finalize(pStatement);
+		success = true;
+	}
+	return success;
+}
+
+bool DataBase::getAllCoinsMap(std::map<std::string, Coin> &mapCoins)
+{
+	std::vector<Coin>	vecCoins;
+
+	if (!getAllCoins(vecCoins))
+		return false;
+
+	for (Coin c : vecCoins)
+	{
+		mapCoins.insert(std::pair<std::string, Coin>(c.getName(), c));
+	}
+	return true;
+}
+
 bool DataBase::getProductCount(int &value)
 {
 	std::string sql = "SELECT COUNT(*) from tblProducts";

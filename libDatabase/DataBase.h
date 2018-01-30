@@ -1,9 +1,11 @@
 #pragma once
 #include "sqlite3.h"
 #include <vector>
+#include <map>
 #include <string>
 #include "Product.h"
 #include "Price.h"
+#include "Coin.h"
 
 class DataBase
 {
@@ -12,6 +14,13 @@ public:
 	virtual ~DataBase();
 
 	bool	connect();
+
+	// COINS
+	bool	insertCoin(const std::string &name, const std::string &description, const std::string &token);
+	bool	updateCoin(const Coin &c);
+	bool	doesCoinExist(const std::string &name, bool &bExists);
+	bool	getAllCoins(std::vector<Coin> &vecCoins);
+	bool	getAllCoinsMap(std::map<std::string, Coin> &mapCoins);
 
 	// PRODUCTS
 	bool	getProductCount(int &value);

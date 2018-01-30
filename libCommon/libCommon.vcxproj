@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BollingerBand.h" />
+    <ClInclude Include="Coin.h" />
     <ClInclude Include="Exchange.h" />
     <ClInclude Include="MovingAverage.h" />
     <ClInclude Include="Orders.h" />
