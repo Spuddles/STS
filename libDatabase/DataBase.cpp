@@ -183,8 +183,8 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 {
 	bool		  success = false;
 	sqlite3_stmt *pStatement;
-	std::string sql = "SELECT id, active, baseAsset, baseAssetName, baseAssetUnit, decimalPlaces, matchingUnitType,"
-		"minQty, minTrade, quoteAsset, quoteAssetName, quoteAssetUnit, status, symbol, tickSize, withdrawFee "
+	std::string sql = "SELECT id, active, baseCoin, decimalPlaces, matchingUnitType,"
+		"minQty, minTrade, quoteCoin, status, symbol, tickSize, withdrawFee "
 		"FROM tblProducts";
 
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
@@ -197,20 +197,16 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 			Product p;
 			p.setID(sqlite3_column_int(pStatement, 0));
 			p.setActive( (sqlite3_column_int(pStatement, 1)==1) );
-			p.setBaseAsset(sqlite3_column_text(pStatement, 2));
-			p.setBaseAssetName(sqlite3_column_text(pStatement, 3));
-			p.setBaseAssetUnit(sqlite3_column_text(pStatement, 4));
-			p.setDecimalPlaces(sqlite3_column_int(pStatement, 5));
-			p.setMatchingUnitType(sqlite3_column_text(pStatement, 6));
-			p.setMinQty(sqlite3_column_int(pStatement, 7));
-			p.setMinTrade(sqlite3_column_int(pStatement, 8));
-			p.setQuoteAsset(sqlite3_column_text(pStatement, 9));
-			p.setQuoteAssetName(sqlite3_column_text(pStatement, 10));
-			p.setQuoteAssetUnit(sqlite3_column_text(pStatement, 11));
-			p.setStatus(sqlite3_column_text(pStatement, 12));
-			p.setSymbol(sqlite3_column_text(pStatement, 13));
-			p.setTickSize(sqlite3_column_int(pStatement, 14));
-			p.setWithdrawFee(sqlite3_column_double(pStatement, 15));
+			p.setBaseCoin(sqlite3_column_int(pStatement, 2));
+			p.setDecimalPlaces(sqlite3_column_int(pStatement, 3));
+			p.setMatchingUnitType(sqlite3_column_text(pStatement, 4));
+			p.setMinQty(sqlite3_column_int(pStatement, 5));
+			p.setMinTrade(sqlite3_column_int(pStatement, 6));
+			p.setQuoteCoin(sqlite3_column_int(pStatement, 7));
+			p.setStatus(sqlite3_column_text(pStatement, 8));
+			p.setSymbol(sqlite3_column_text(pStatement, 9));
+			p.setTickSize(sqlite3_column_int(pStatement, 10));
+			p.setWithdrawFee(sqlite3_column_double(pStatement, 11));
 
 			vecProducts.push_back(p);
 			retCode = sqlite3_step(pStatement);
@@ -225,9 +221,9 @@ bool DataBase::insertProduct(Product p)
 {
 	bool success = false;
 
-	std::string sql = "INSERT INTO tblProducts (active, baseAsset, baseAssetName, baseAssetUnit, decimalPlaces, matchingUnitType,"
-		"minQty, minTrade, quoteAsset, quoteAssetName, quoteAssetUnit, status, symbol, tickSize, withdrawFee) "
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	std::string sql = "INSERT INTO tblProducts (active, baseCoin, decimalPlaces, matchingUnitType,"
+		"minQty, minTrade, quoteCoin, status, symbol, tickSize, withdrawFee) "
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	sqlite3_stmt *pStatement;
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
@@ -236,20 +232,16 @@ bool DataBase::insertProduct(Product p)
 		int active;
 		p.isActive() ? active = 1 : active = 0;
 		sqlite3_bind_int(pStatement, 1, active);
-		sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_int(pStatement, 5, p.getDecimalPlaces());
-		sqlite3_bind_text(pStatement, 6, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_double(pStatement, 7, p.getMinQty());
-		sqlite3_bind_double(pStatement, 8, p.getMinTrade());
-		sqlite3_bind_text(pStatement, 9, p.getQuoteAsset().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 10, p.getQuoteAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 11, p.getQuoteAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 12, p.getStatus().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 13, p.getSymbol().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_double(pStatement, 14, p.getTickSize());
-		sqlite3_bind_double(pStatement, 15, p.getWithdrawFee());
+		sqlite3_bind_int(pStatement, 2, p.getBaseCoin());
+		sqlite3_bind_int(pStatement, 3, p.getDecimalPlaces());
+		sqlite3_bind_text(pStatement, 4, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_double(pStatement, 5, p.getMinQty());
+		sqlite3_bind_double(pStatement, 6, p.getMinTrade());
+		sqlite3_bind_int(pStatement, 7, p.getQuoteCoin());
+		sqlite3_bind_text(pStatement, 8, p.getStatus().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 9, p.getSymbol().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_double(pStatement, 10, p.getTickSize());
+		sqlite3_bind_double(pStatement, 11, p.getWithdrawFee());
 
 		retCode = sqlite3_step(pStatement);
 		if (retCode == SQLITE_DONE)
@@ -269,8 +261,8 @@ bool DataBase::updateProduct(const Product &p)
 {
 	bool success = false;
 
-	std::string sql = "UPDATE tblProducts SET active=?, baseAsset=?, baseAssetName=?, baseAssetUnit=?, decimalPlaces=?,"
-		"matchingUnitType=?,minQty=?, minTrade=?, quoteAsset=?, quoteAssetName=?, quoteAssetUnit=?, status=?, symbol=?,"
+	std::string sql = "UPDATE tblProducts SET active=?, baseCoin=?, decimalPlaces=?,"
+		"matchingUnitType=?,minQty=?, minTrade=?, quoteCoin=?, status=?, symbol=?,"
 		"tickSize=?, withdrawFee=? WHERE id=?";
 
 	sqlite3_stmt *pStatement;
@@ -280,21 +272,17 @@ bool DataBase::updateProduct(const Product &p)
 		int active;
 		p.isActive() ? active = 1 : active = 0;
 		sqlite3_bind_int(pStatement, 1, active);
-		sqlite3_bind_text(pStatement, 2, p.getBaseAsset().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 3, p.getBaseAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 4, p.getBaseAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_int(pStatement, 5, p.getDecimalPlaces());
-		sqlite3_bind_text(pStatement, 6, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_double(pStatement, 7, p.getMinQty());
-		sqlite3_bind_double(pStatement, 8, p.getMinTrade());
-		sqlite3_bind_text(pStatement, 9, p.getQuoteAsset().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 10, p.getQuoteAssetName().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 11, p.getQuoteAssetUnit().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 12, p.getStatus().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_text(pStatement, 13, p.getSymbol().c_str(), -1, SQLITE_TRANSIENT);
-		sqlite3_bind_double(pStatement, 14, p.getTickSize());
-		sqlite3_bind_double(pStatement, 15, p.getWithdrawFee());
-		sqlite3_bind_int(pStatement, 16, p.getID());
+		sqlite3_bind_int(pStatement, 2, p.getBaseCoin());
+		sqlite3_bind_int(pStatement, 3, p.getDecimalPlaces());
+		sqlite3_bind_text(pStatement, 4, p.getMatchingUnitType().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_double(pStatement, 5, p.getMinQty());
+		sqlite3_bind_double(pStatement, 6, p.getMinTrade());
+		sqlite3_bind_int(pStatement, 7, p.getQuoteCoin());
+		sqlite3_bind_text(pStatement, 8, p.getStatus().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_text(pStatement, 9, p.getSymbol().c_str(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_double(pStatement, 10, p.getTickSize());
+		sqlite3_bind_double(pStatement, 11, p.getWithdrawFee());
+		sqlite3_bind_int(pStatement, 12, p.getID());
 
 		retCode = sqlite3_step(pStatement);
 		if (retCode == SQLITE_DONE)

@@ -25,7 +25,7 @@ public:
 	void		setBaseAssetUnit(const std::string &unit) { m_baseAssetUnit = unit; }
 	void		setBaseAssetUnit(const unsigned char *unit) { m_baseAssetUnit = handleString(unit); }
 
-	unsigned int getBaseCoin() { return m_baseCoin; }
+	unsigned int getBaseCoin() const { return m_baseCoin; }
 	void		 setBaseCoin(unsigned int coin) { m_baseCoin = coin; }
 
 	uint8_t		getDecimalPlaces() const { return m_decimalPlaces; }
