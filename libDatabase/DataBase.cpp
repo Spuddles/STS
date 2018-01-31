@@ -217,6 +217,42 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 	return success;
 }
 
+bool DataBase::getProduct(unsigned int id, Product &product)
+{
+	bool		  success = false;
+	sqlite3_stmt *pStatement;
+	std::string sql = "SELECT id, active, baseCoin, decimalPlaces, matchingUnitType,"
+		"minQty, minTrade, quoteCoin, status, symbol, tickSize, withdrawFee "
+		"FROM tblProducts WHERE id=?";
+
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+	sqlite3_bind_int(pStatement, 1, id);
+	if (retCode == SQLITE_OK)
+	{
+		retCode = sqlite3_step(pStatement);
+		if (retCode == SQLITE_ROW)
+		{
+			product.setID(sqlite3_column_int(pStatement, 0));
+			product.setActive((sqlite3_column_int(pStatement, 1) == 1));
+			product.setBaseCoin(sqlite3_column_int(pStatement, 2));
+			product.setDecimalPlaces(sqlite3_column_int(pStatement, 3));
+			product.setMatchingUnitType(sqlite3_column_text(pStatement, 4));
+			product.setMinQty(sqlite3_column_int(pStatement, 5));
+			product.setMinTrade(sqlite3_column_int(pStatement, 6));
+			product.setQuoteCoin(sqlite3_column_int(pStatement, 7));
+			product.setStatus(sqlite3_column_text(pStatement, 8));
+			product.setSymbol(sqlite3_column_text(pStatement, 9));
+			product.setTickSize(sqlite3_column_int(pStatement, 10));
+			product.setWithdrawFee(sqlite3_column_double(pStatement, 11));
+
+			retCode = sqlite3_step(pStatement);
+		}
+		sqlite3_finalize(pStatement);
+		success = true;
+	}
+	return success;
+}
+
 bool DataBase::insertProduct(Product p)
 {
 	bool success = false;

@@ -28,6 +28,7 @@ public:
 	bool	deleteProducts();
 	bool	clearActiveFlag();
 	bool	getAllProducts(std::vector<Product> &vecProducts);
+	bool	getProduct(unsigned int id, Product &product);
 	bool	insertProduct(Product p);
 	bool	updateProduct(const Product &p);
 	bool	doesProductExist(const std::string &symbol, bool &exists);

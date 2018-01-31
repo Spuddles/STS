@@ -1,6 +1,7 @@
 #include "Exchange.h"
 #include "Portfolio.h"
 #include "Price.h"
+#include "Product.h"
 
 #include <iostream>
 
@@ -22,7 +23,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 	for (size_t i=0;i<m_vecOrders.size();i++)
 	{
 		Order o = m_vecOrders[i];
-		if (o.getID() == id)
+		if (o.getProduct().getID() == id)
 		{
 			bool c = o.getAmount() < p.getVolume();
 			if (o.isBuy() && o.getPrice() > p.getLow() && o.getAmount() < p.getVolume())
@@ -44,16 +45,16 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 	}
 }
 
-bool Exchange::placeLimitOrder(unsigned int id, double amount, double price)
+bool Exchange::placeLimitOrder(Product &product, double amount, double price)
 {
-	std::cout << "Placing order on " << id << " for " << amount << " at price " << price << std::endl;
-	m_vecOrders.push_back(Order(id, amount, price, true));
+	std::cout << "Placing order on " << product.getID() << " for " << amount << " at price " << price << std::endl;
+	m_vecOrders.push_back(Order(product, amount, price, true));
 	return true;
 }
 
-bool Exchange::placeMarketOrder(unsigned int id, double amount)
+bool Exchange::placeMarketOrder(Product &product, double amount)
 {
-	m_vecOrders.push_back(Order(id, amount, 0.0, false));
+	m_vecOrders.push_back(Order(product, amount, 0.0, false));
 	return true;
 }
 
@@ -62,7 +63,7 @@ int Exchange::getLiveOrderCount(unsigned int id)
 	int orderCount = 0;
 	for (Order &o : m_vecOrders)
 	{
-		if (o.getID() == id)
+		if (o.getProduct().getID() == id)
 		{
 			orderCount++;
 		}

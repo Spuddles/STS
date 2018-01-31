@@ -6,6 +6,7 @@
 
 class Portfolio;
 class Price;
+class Product;
 
 class Exchange
 {
@@ -14,8 +15,8 @@ public:
 	virtual ~Exchange();
 
 	void	updatePrice(unsigned int id, const Price &p);
-	bool	placeLimitOrder(unsigned int id, double amount, double price);
-	bool	placeMarketOrder(unsigned int id, double amount);
+	bool	placeLimitOrder(Product &product, double amount, double price);
+	bool	placeMarketOrder(Product &product, double amount);
 
 	int		getLiveOrderCount(unsigned int id);
 
