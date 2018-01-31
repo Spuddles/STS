@@ -7,6 +7,9 @@ public:
 				Price();
 	virtual		~Price();
 
+	unsigned int	getProductID() const { return m_ProductID; }
+	void			setProductID(unsigned int id) { m_ProductID = id; }
+
 	uint64_t	getOpenTime() const { return m_openTime; }
 	void		setOpenTime(uint64_t time) { m_openTime = time; }
 
@@ -34,6 +37,7 @@ public:
 	double		getMid() const { return (m_open + m_close) / 2.0; }
 
 private:
+	unsigned int m_ProductID;
 	uint64_t	m_openTime;
 	double		m_open;
 	double		m_high;

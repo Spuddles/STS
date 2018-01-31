@@ -15,6 +15,9 @@ public:
 
 	bool	connect();
 
+	// EXCHANGE RATES
+
+
 	// COINS
 	bool	insertCoin(const std::string &name, const std::string &description, const std::string &token);
 	bool	updateCoin(const Coin &c);
@@ -38,7 +41,10 @@ public:
 	bool	insertPrice(int id, Price &price);
 	bool	getNextUpdateTime(int64_t &value);
 	bool	verifyUploads(int &broken);
+	bool	getPriceData(const std::string &symbol, std::vector<Price> &vecPrices);
 	bool	getPriceData(int id, std::vector<Price> &vecPrices);
+	bool	getPriceData(std::vector<std::string> &vecSymbols, std::vector<Price> &vecPrices);
+	bool	getPriceData(std::vector<unsigned int> &vecIDs, std::vector<Price> &vecPrices);
 
 private:
 	bool	getScaler(const std::string &sql, int &retValue);

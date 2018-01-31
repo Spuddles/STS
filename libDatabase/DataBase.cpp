@@ -369,12 +369,37 @@ bool DataBase::insertPrice(int id, Price &price)
 	return success;
 }
 
+bool DataBase::getPriceData(const std::string &symbol, std::vector<Price> &vecPrices)
+{
+	int productID;
+	
+	if (!getProductID(symbol, productID))
+	{
+		return false;
+	}
+	return getPriceData(productID, vecPrices);
+}
+
+bool DataBase::getPriceData(std::vector<std::string> &vecSymbols, std::vector<Price> &vecPrices)
+{
+	std::vector<unsigned int>	vecIDs;
+
+	int id;
+	for (std::string &symbol : vecSymbols)
+	{
+		getProductID(symbol, id);
+		vecIDs.push_back(id);
+	}
+	return getPriceData(vecIDs, vecPrices);
+}
+
+
 bool DataBase::getPriceData(int id, std::vector<Price> &vecPrices)
 {
 	bool success = false;
 
 	sqlite3_stmt *pStatement;
-	std::string sql = "SELECT openTime, open, high, low, close, volume, closeTime, trades "
+	std::string sql = "SELECT id, openTime, open, high, low, close, volume, closeTime, trades "
 		"FROM tblOneMinutePrices WHERE id=? ORDER BY openTime ASC";
 
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
@@ -386,14 +411,60 @@ bool DataBase::getPriceData(int id, std::vector<Price> &vecPrices)
 		while (retCode == SQLITE_ROW)
 		{
 			Price p;
-			p.setOpenTime(sqlite3_column_int64(pStatement, 0));
-			p.setOpen(sqlite3_column_double(pStatement, 1));
-			p.setHigh(sqlite3_column_double(pStatement, 2));
-			p.setLow(sqlite3_column_double(pStatement, 3));
-			p.setClose(sqlite3_column_double(pStatement, 4));
-			p.setVolume(sqlite3_column_double(pStatement, 5));
-			p.setCloseTime(sqlite3_column_int64(pStatement, 6));
-			p.setTrades(sqlite3_column_int(pStatement, 7));
+			p.setProductID(sqlite3_column_int(pStatement, 0));
+			p.setOpenTime(sqlite3_column_int64(pStatement, 1));
+			p.setOpen(sqlite3_column_double(pStatement, 2));
+			p.setHigh(sqlite3_column_double(pStatement, 3));
+			p.setLow(sqlite3_column_double(pStatement, 4));
+			p.setClose(sqlite3_column_double(pStatement, 5));
+			p.setVolume(sqlite3_column_double(pStatement, 6));
+			p.setCloseTime(sqlite3_column_int64(pStatement, 7));
+			p.setTrades(sqlite3_column_int(pStatement, 8));
+
+			vecPrices.push_back(p);
+			retCode = sqlite3_step(pStatement);
+		}
+		sqlite3_finalize(pStatement);
+		success = true;
+	}
+	return success;
+}
+
+bool DataBase::getPriceData(std::vector<unsigned int> &vecIDs, std::vector<Price> &vecPrices)
+{
+	bool success = false;
+
+	sqlite3_stmt *pStatement;
+	std::stringstream ss;
+	ss << "SELECT id, openTime, open, high, low, close, volume, closeTime, trades ";
+	ss << "FROM tblOneMinutePrices WHERE id IN (";
+	for (size_t i=0;i<vecIDs.size();++i)
+	{
+		ss << vecIDs[i];
+		if (i < vecIDs.size() - 1)
+		{
+			ss << ",";
+		}
+	}
+	
+	ss << ") ORDER BY openTime ASC";
+
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, ss.str().c_str(), (int)ss.str().size(), &pStatement, nullptr);
+	if (retCode == SQLITE_OK)
+	{
+		retCode = sqlite3_step(pStatement);
+		while (retCode == SQLITE_ROW)
+		{
+			Price p;
+			p.setProductID(sqlite3_column_int(pStatement, 0));
+			p.setOpenTime(sqlite3_column_int64(pStatement, 1));
+			p.setOpen(sqlite3_column_double(pStatement, 2));
+			p.setHigh(sqlite3_column_double(pStatement, 3));
+			p.setLow(sqlite3_column_double(pStatement, 4));
+			p.setClose(sqlite3_column_double(pStatement, 5));
+			p.setVolume(sqlite3_column_double(pStatement, 6));
+			p.setCloseTime(sqlite3_column_int64(pStatement, 7));
+			p.setTrades(sqlite3_column_int(pStatement, 8));
 
 			vecPrices.push_back(p);
 			retCode = sqlite3_step(pStatement);
