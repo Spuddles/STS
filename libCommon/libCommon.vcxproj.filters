@@ -39,6 +39,9 @@
     <ClCompile Include="Portfolio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CrumbleStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Price.h">
@@ -69,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Coin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CrumbleStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,7 +29,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 			if (o.isBuy() && o.getPrice() > p.getLow() && o.getAmount() < p.getVolume())
 			{
 				m_Portfolio.addFilledOrder(o);
-				m_Portfolio.displayPosition();
+				//m_Portfolio.displayPosition();
 				m_vecOrders.erase(m_vecOrders.begin() + i);
 				--i;
 			}
@@ -37,7 +37,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 			{
 				// Move this order to the filled collection
 				m_Portfolio.addFilledOrder(o);
-				m_Portfolio.displayPosition();
+				//m_Portfolio.displayPosition();
 				m_vecOrders.erase(m_vecOrders.begin() + i);
 				-- i;
 			}
@@ -47,7 +47,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 
 bool Exchange::placeLimitOrder(Product &product, double amount, double price)
 {
-	std::cout << "Placing order on " << product.getID() << " for " << amount << " at price " << price << std::endl;
+//	std::cout << "Placing order on " << product.getID() << " for " << amount << " at price " << price << std::endl;
 	m_vecOrders.push_back(Order(product, amount, price, true));
 	return true;
 }

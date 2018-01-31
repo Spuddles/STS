@@ -12,10 +12,13 @@ public:
 			Portfolio();
 	virtual ~Portfolio();
 
-	void	updatePrice(unsigned int id, const Price &p);
-
 	void	addFunds(unsigned int id, double amount);
 	void	addFilledOrder(const Order &order);
+
+	bool	canAfford(const Product &prod, double amount, double price);
+
+	double	getAmount(unsigned int coinID);
+	double	getUSDValue();
 
 	void	displayPosition();
 	void	displayHistory();
