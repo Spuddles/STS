@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoadPriceData", "LoadPriceData.vcxproj", "{4BC46115-FCF0-4B37-A3F9-34C2C4A9F7EB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BackTest", "LoadPriceData.vcxproj", "{4BC46115-FCF0-4B37-A3F9-34C2C4A9F7EB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5133DA50-EF3A-4F6B-921F-4BD4B9176508} = {5133DA50-EF3A-4F6B-921F-4BD4B9176508}
 		{4DC05A64-B9C5-437A-A049-D052662AE618} = {4DC05A64-B9C5-437A-A049-D052662AE618}
