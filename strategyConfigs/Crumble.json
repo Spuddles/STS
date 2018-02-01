@@ -1,0 +1,11 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "BNBBTC",
+    "orderSize"     : "100",
+    "minOrderGap"   : "10",
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}
