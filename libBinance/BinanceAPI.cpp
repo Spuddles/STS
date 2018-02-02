@@ -59,14 +59,12 @@ std::string BinanceAPI::convertTime(uint64_t &timestamp)
 	return std::string(buffer);
 }
 
-bool BinanceAPI::getPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices)
+bool BinanceAPI::getHistoricPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices)
 {
-	std::string str = m_pRequests->getPrices(product, interval, amount);
+	std::string str = m_pRequests->getHistoricPrices(product, interval, amount);
 
 	if (str.empty())
 		return false;
-
-	//std::cout << str << std::endl;
 
 	try
 	{
@@ -160,6 +158,41 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 			std::cout << it->dump(4) << std::endl;
 		}
 	}
-
 	return true;
 }
+
+bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &vecPricePairs)
+{
+	std::string str = m_pRequests->getCurrentPrices();
+
+	if (str.empty())
+		return false;
+
+	try
+	{
+		json j = json::parse(str);
+
+		size_t items = j.size();
+
+		for (json::iterator it = j.begin(); it != j.end(); ++it)
+		{
+			json &p = (*it);
+
+			std::cout << p.dump() << std::endl;
+
+			std::string symbol = p["symbol"];
+			std::string priceStr = p["price"];
+			double price = atof(priceStr.c_str());
+
+			vecPricePairs.push_back(std::pair<std::string, double>(symbol, price));
+		}
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
+
+}
+

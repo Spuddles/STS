@@ -55,7 +55,7 @@ std::string WebSocketRequest::getProducts()
 	return request("https://www.binance.com/exchange/public/product");
 }
 
-std::string WebSocketRequest::getPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
+std::string WebSocketRequest::getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
 {
 	std::stringstream ss;
 	ss << "https://www.binance.com/api/v1/klines?symbol=";
@@ -64,6 +64,11 @@ std::string WebSocketRequest::getPrices(const std::string &symbol, const std::st
 	ss << "&limit=" << amount;
 
 	return request(ss.str());
+}
+
+std::string WebSocketRequest::getCurrentPrices()
+{
+	return request("https://www.binance.com/api/v1/ticker/allPrices");
 }
 
 size_t WebSocketRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)

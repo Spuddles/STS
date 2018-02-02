@@ -15,7 +15,8 @@ public:
 	std::string	getPairsPricesVolume();
 	std::string	getPairsPrices();
 	std::string	getProducts();
-	std::string getPrices(const std::string &symbol, const std::string &interval, unsigned int amount);
+	std::string getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount);
+	std::string getCurrentPrices();
 
 	std::string request(const std::string &url);
 

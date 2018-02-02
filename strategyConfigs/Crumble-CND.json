@@ -1,0 +1,12 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "CNDBTC",
+    "initialBTC"    : 1,
+    "orderSize"     : 500,
+    "minOrderGap"   : 20,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}

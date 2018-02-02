@@ -5,12 +5,29 @@
 
 Portfolio::Portfolio()
 {
-	m_mapPrices[2] = 11.3088;   // BNB USD
-	m_mapPrices[4] = 10354.97;	// BTC USD
 }
 
 Portfolio::~Portfolio()
 {
+}
+
+void Portfolio::initialiseFunds(std::vector<Product> &vecProducts)
+{
+	for (Product p : vecProducts)
+	{
+		initialiseFunds(p);
+	}
+}
+
+void Portfolio::initialiseFunds(const Product &product)
+{
+	m_mapCurrentPosition[product.getBaseCoin()] = 0;
+	m_mapCurrentPosition[product.getQuoteCoin()] = 0;
+}
+
+void Portfolio::updatePrice(const Price &price)
+{
+	m_Price = price.getClose();
 }
 
 void Portfolio::addFunds(unsigned int id, double amount)
@@ -79,31 +96,34 @@ double Portfolio::getAmount(unsigned int coinID)
 	return m_mapCurrentPosition[coinID];
 }
 
-double Portfolio::getUSDValue()
+double Portfolio::getBTCValue()
 {
-	double	totalValue = 0.0;
+	double totalValue = 0.0;
 	for (auto it : m_mapCurrentPosition)
 	{
 		unsigned int id = it.first;
 		double		amount = it.second;
-		double value = m_mapPrices[id] * amount;
-		totalValue += value;
+
+		if (id == 4)	// BTC
+		{
+			totalValue += amount;
+		}
+		else
+		{
+			totalValue += m_Price * amount;
+		}
 	}
 	return totalValue;
 }
 
 void Portfolio::displayPosition()
 {
-	double	totalValue = 0.0;
 	for (auto it : m_mapCurrentPosition)
 	{
 		unsigned int id = it.first;
 		double		amount = it.second;
-		double value = m_mapPrices[id] * amount;
-		std::cout << id << " = " << amount << " (" << value << ")" << std::endl;
-		totalValue += value;
+		std::cout << id << " = " << amount << std::endl;
 	}
-	std::cout << "Total Value = " << totalValue << " USD" << std::endl;
 }
 
 void Portfolio::displayHistory()

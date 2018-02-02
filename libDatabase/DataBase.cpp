@@ -15,9 +15,9 @@ DataBase::~DataBase()
 	}
 }
 
-bool DataBase::connect()
+bool DataBase::connect(const std::string &dbFile)
 {
-	int retCode = sqlite3_open("Trading.sqlite", &m_pSQLiteDB);
+	int retCode = sqlite3_open(dbFile.c_str(), &m_pSQLiteDB);
 	if (retCode != SQLITE_OK)
 		return false;
 
@@ -129,6 +129,28 @@ bool DataBase::getAllCoinsMap(std::map<std::string, Coin> &mapCoins)
 	return true;
 }
 
+bool DataBase::getCoinID(const std::string &coin, unsigned int &coinID)
+{
+	bool		  success = false;
+	sqlite3_stmt *pStatement;
+	std::string sql = "SELECT id FROM tblCoins WHERE name=?";
+
+	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
+	if (retCode == SQLITE_OK)
+	{
+		sqlite3_bind_text(pStatement, 1, coin.c_str(), -1, SQLITE_TRANSIENT);
+		retCode = sqlite3_step(pStatement);
+		if (retCode == SQLITE_ROW)
+		{
+			coinID = sqlite3_column_int(pStatement, 0);
+		}
+		sqlite3_finalize(pStatement);
+		success = true;
+	}
+	return success;
+}
+
+
 bool DataBase::getProductCount(int &value)
 {
 	std::string sql = "SELECT COUNT(*) from tblProducts";
@@ -215,6 +237,35 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 		success = true;
 	}
 	return success;
+}
+
+bool DataBase::getProducts(std::vector<std::string> &vecSymbols, std::vector<Product> &vecProducts)
+{
+	for (std::string symbol : vecSymbols)
+	{
+		int id;
+		if (!getProductID(symbol, id))
+		{
+			return false;
+		}
+		Product p;
+		if (!getProduct(id, p))
+		{
+			return false;
+		}
+		vecProducts.push_back(p);
+	}
+	return true;
+}
+
+bool DataBase::getProduct(const std::string &symbol, Product &product)
+{
+	int productID;
+	if (!getProductID(symbol, productID))
+	{
+		return false;
+	}
+	return getProduct(productID, product);
 }
 
 bool DataBase::getProduct(unsigned int id, Product &product)

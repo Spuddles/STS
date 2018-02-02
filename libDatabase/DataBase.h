@@ -13,7 +13,7 @@ public:
 			DataBase();
 	virtual ~DataBase();
 
-	bool	connect();
+	bool	connect(const std::string &dbFile);
 
 	// EXCHANGE RATES
 
@@ -24,6 +24,7 @@ public:
 	bool	doesCoinExist(const std::string &name, bool &bExists);
 	bool	getAllCoins(std::vector<Coin> &vecCoins);
 	bool	getAllCoinsMap(std::map<std::string, Coin> &mapCoins);
+	bool	getCoinID(const std::string &coin, unsigned int &coinID);
 
 	// PRODUCTS
 	bool	getProductCount(int &value);
@@ -31,6 +32,8 @@ public:
 	bool	deleteProducts();
 	bool	clearActiveFlag();
 	bool	getAllProducts(std::vector<Product> &vecProducts);
+	bool	getProducts(std::vector<std::string> &vecSymbols, std::vector<Product> &vecProducts);
+	bool	getProduct(const std::string &symbol, Product &product);
 	bool	getProduct(unsigned int id, Product &product);
 	bool	insertProduct(Product p);
 	bool	updateProduct(const Product &p);

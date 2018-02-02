@@ -41,9 +41,14 @@ std::string	FileRequest::getProducts()
 	return loadFile("allProducts.json");
 }
 
-std::string FileRequest::getPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
+std::string FileRequest::getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
 {
 	return loadFile("prices.json");
+}
+
+std::string FileRequest::getCurrentPrices()
+{
+	return loadFile("allPrices.json");
 }
 
 std::string FileRequest::loadFile(const std::string &filename)

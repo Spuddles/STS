@@ -5,6 +5,7 @@
 #include "Orders.h"
 
 class Price;
+class Product;
 
 class Portfolio
 {
@@ -12,19 +13,23 @@ public:
 			Portfolio();
 	virtual ~Portfolio();
 
+	void	initialiseFunds(std::vector<Product> &vecProducts);
+	void	initialiseFunds(const Product &product);
+	void	updatePrice(const Price &price);
+
 	void	addFunds(unsigned int id, double amount);
 	void	addFilledOrder(const Order &order);
 
 	bool	canAfford(const Product &prod, double amount, double price);
 
 	double	getAmount(unsigned int coinID);
-	double	getUSDValue();
+	double	getBTCValue();
 
 	void	displayPosition();
 	void	displayHistory();
 
 private:
-	std::map<unsigned int, double>	m_mapPrices;
+	double							m_Price;
 	std::map<unsigned int, double>	m_mapCurrentPosition;
 	std::vector<Order>				m_vecFilledOrders;
 };

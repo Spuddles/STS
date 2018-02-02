@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoadPriceData.cpp">
+    <ClCompile Include="BackTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,0 +1,12 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+    "symbol"        : "NEOBTC",
+    "initialBTC"    : 1,
+    "orderSize"     : 10,
+    "minOrderGap"   : 10,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}

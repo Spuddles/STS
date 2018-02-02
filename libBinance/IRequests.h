@@ -15,6 +15,7 @@ public:
 	virtual std::string	getPairsPricesVolume() = 0;
 	virtual std::string	getPairsPrices() = 0;
 	virtual std::string	getProducts() = 0;
-	virtual std::string getPrices(const std::string &symbol, const std::string &interval, unsigned int amount) = 0;
+	virtual std::string getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount) = 0;
+	virtual std::string getCurrentPrices() = 0;
 };
 

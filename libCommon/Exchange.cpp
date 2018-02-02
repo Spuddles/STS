@@ -5,8 +5,9 @@
 
 #include <iostream>
 
-Exchange::Exchange(Portfolio &p):
-	m_Portfolio(p)
+Exchange::Exchange(Portfolio &p) :
+	m_Portfolio(p),
+	m_lastTradeTime(0LL)
 {
 }
 
@@ -45,10 +46,13 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 	}
 }
 
-bool Exchange::placeLimitOrder(Product &product, double amount, double price)
+bool Exchange::placeLimitOrder(Product &product, double amount, const Price &price)
 {
 //	std::cout << "Placing order on " << product.getID() << " for " << amount << " at price " << price << std::endl;
-	m_vecOrders.push_back(Order(product, amount, price, true));
+	m_vecOrders.push_back(Order(product, amount, price.getClose(), true));
+
+	m_lastTradeTime = price.getCloseTime();
+
 	return true;
 }
 
@@ -70,3 +74,10 @@ int Exchange::getLiveOrderCount(unsigned int id)
 	}
 	return orderCount;
 }
+
+int Exchange::minutesSinceLastTrade(uint64_t now)
+{
+	int minutes = (int)((now - m_lastTradeTime) / 60000);
+	return minutes;
+}
+

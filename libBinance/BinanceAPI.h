@@ -56,7 +56,8 @@ public:
 	bool		getTime(uint64_t &timestamp);
 	std::string	convertTime(uint64_t &timestamp);
 	bool		getProducts(std::vector<Product> &products);
-	bool		getPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices);
+	bool		getHistoricPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices);
+	bool		getCurrentPrices(std::vector<std::pair<std::string, double>> &vecPricePairs);
 
 private:
 	IRequests  *m_pRequests;
