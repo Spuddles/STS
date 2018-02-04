@@ -1,5 +1,6 @@
 #include "CrumbleStrategy.h"
 #include "Price.h"
+#include <iostream>
 
 CrumbleStrategy::CrumbleStrategy():
 	m_BB(21, 2.0), m_BuySignalCount(0), m_SellSignalCount(0)
@@ -12,6 +13,7 @@ CrumbleStrategy::~CrumbleStrategy()
 
 void CrumbleStrategy::updatePrice(const Price &price)
 {
+	static unsigned int priceCount = 0;
 	m_BB.addPrice(price.getClose());
 
 	// See if the price is lower than bound to signal a cheap price to buy
@@ -33,6 +35,15 @@ void CrumbleStrategy::updatePrice(const Price &price)
 	{
 		m_SellSignalCount = 0;
 	}
+
+	std::cout << priceCount++ << ", " << m_BB.getLowerValue() << ", " << price.getClose();
+	std::cout << ", " << m_BB.getMidValue() << ", " << m_BB.getUpperValue() << ", ";
+	if (m_SellSignalCount > 0)
+		std::cout << price.getClose();
+	std::cout << ", ";
+	if (m_BuySignalCount > 0)
+		std::cout << price.getClose();
+	std::cout << std::endl;
 }
 
 bool CrumbleStrategy::isBuySignal()
