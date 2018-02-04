@@ -70,6 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BollingerBand.cpp" />
+    <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CrumbleStrategy.cpp" />
     <ClCompile Include="Exchange.cpp" />
     <ClCompile Include="Helpers.cpp" />
@@ -82,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BollingerBand.h" />
+    <ClInclude Include="CLogger.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="CrumbleStrategy.h" />
     <ClInclude Include="Exchange.h" />
