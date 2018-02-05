@@ -2,11 +2,12 @@
 	"strategyName"  : "CrumbleStrat",
 	"strategyFile"  : "Crumble.dll",
 	"symbol"        : "IOTABTC",
-    "initialBTC"    : 1,
-    "orderSize"     : 100,
+    "initialBTC"    : 0.1,
+    "orderSize"     : 450,
     "minOrderGap"   : 10,
 	"startDate"     : "-1",
     "endDate"       : "-1",
+    "logFile"       : "Crumble-IOTA.log",
     "portfolioFile" : "portfolio.log",
     "tradeFile"     : "trade.log"
 }

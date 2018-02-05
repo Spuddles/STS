@@ -2,11 +2,12 @@
 	"strategyName"  : "CrumbleStrat",
 	"strategyFile"  : "Crumble.dll",
 	"symbol"        : "ETHBTC",
-    "initialBTC"    : 10,
+    "initialBTC"    : 0.15,
     "orderSize"     : 1,
-    "minOrderGap"   : 20,
+    "minOrderGap"   : 10,
 	"startDate"     : "-1",
     "endDate"       : "-1",
+    "logFile"       : "Crumble-ETH.log",
     "portfolioFile" : "portfolio.log",
     "tradeFile"     : "trade.log"
 }

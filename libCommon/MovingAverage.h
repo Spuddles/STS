@@ -7,7 +7,7 @@ public:
 			MovingAverage(int timePeriods);
 	virtual ~MovingAverage();
 
-	double	addPrice(double price);
+	double	updatePrice(double price);
 	double	getAverage();
 
 private:

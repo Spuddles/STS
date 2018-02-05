@@ -10,7 +10,7 @@ Variance::~Variance()
 {
 }
 
-double Variance::addPrice(double price)
+double Variance::updatePrice(double price)
 {
 	m_queuePrices.push_front(price);
 	if (m_queuePrices.size() > m_timePoints)

@@ -11,10 +11,10 @@ BollingerBand::~BollingerBand()
 {
 }
 
-double BollingerBand::addPrice(double price)
+double BollingerBand::updatePrice(double price)
 {
-	double ma = m_MA.addPrice(price);
-	m_Variance.addPrice(price);
+	double ma = m_MA.updatePrice(price);
+	m_Variance.updatePrice(price);
 	return ma;
 }
 

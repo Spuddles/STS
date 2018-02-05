@@ -2,11 +2,12 @@
 	"strategyName"  : "CrumbleStrat",
 	"strategyFile"  : "Crumble.dll",
 	"symbol"        : "LTCBTC",
-    "initialBTC"    : 1,
+    "initialBTC"    : 0.1,
     "orderSize"     : 4,
     "minOrderGap"   : 20,
 	"startDate"     : "-1",
     "endDate"       : "-1",
+    "logFile"       : "Crumble-LTC.log",
     "portfolioFile" : "portfolio.log",
     "tradeFile"     : "trade.log"
 }

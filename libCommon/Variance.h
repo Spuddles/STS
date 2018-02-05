@@ -7,7 +7,7 @@ public:
 			Variance(int timePoints);
 	virtual ~Variance();
 
-	double	addPrice(double price);
+	double	updatePrice(double price);
 	double	getVariance();
 	double	getStandardDeviation();
 

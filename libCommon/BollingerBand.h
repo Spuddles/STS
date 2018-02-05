@@ -8,7 +8,7 @@ public:
 			BollingerBand(int timePeriods, double scale);
 	virtual ~BollingerBand();
 
-	double	addPrice(double price);
+	double	updatePrice(double price);
 	double	getMidValue();
 	double	getUpperValue();
 	double	getLowerValue();

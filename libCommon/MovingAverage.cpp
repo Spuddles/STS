@@ -12,7 +12,7 @@ MovingAverage::~MovingAverage()
 {
 }
 
-double MovingAverage::addPrice(double price)
+double MovingAverage::updatePrice(double price)
 {
 	m_queuePrices.push_front(price);
 
