@@ -1,0 +1,13 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "AIONBTC",
+    "initialBTC"    : 0.1,
+    "orderSize"     : 250,
+    "minOrderGap"   : 10,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "logFile"       : "Crumble-AION.log",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}

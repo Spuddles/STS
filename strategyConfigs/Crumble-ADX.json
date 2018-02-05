@@ -1,0 +1,13 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "ADXBTC",
+    "initialBTC"    : 0.1,
+    "orderSize"     : 500,
+    "minOrderGap"   : 10,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "logFile"       : "Crumble-ADX.log",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}

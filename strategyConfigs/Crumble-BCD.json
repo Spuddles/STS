@@ -1,0 +1,13 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "BNBBTC",
+    "initialBTC"    : 0.1,
+    "orderSize"     : 90,
+    "minOrderGap"   : 10,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "logFile"       : "Crumble-BNB.log",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}

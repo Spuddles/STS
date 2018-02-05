@@ -1,0 +1,13 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"strategyFile"  : "Crumble.dll",
+	"symbol"        : "AMBBTC",
+    "initialBTC"    : 0.1,
+    "orderSize"     : 1250,
+    "minOrderGap"   : 10,
+	"startDate"     : "-1",
+    "endDate"       : "-1",
+    "logFile"       : "Crumble-AMB.log",
+    "portfolioFile" : "portfolio.log",
+    "tradeFile"     : "trade.log"
+}
