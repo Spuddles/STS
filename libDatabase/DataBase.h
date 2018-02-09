@@ -14,6 +14,12 @@ public:
 	virtual ~DataBase();
 
 	bool	connect(const std::string &dbFile);
+	bool	doesTableExist(const std::string &tablename);
+
+	// TABLE CREATION
+	bool	createCoinTable();
+	bool	createProductTable();
+	bool	createPriceTable();
 
 	// EXCHANGE RATES
 

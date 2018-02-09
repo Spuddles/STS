@@ -1,6 +1,7 @@
 #include "DataBase.h"
 #include <string>
 #include <sstream>
+#include "Logger.h"
 
 DataBase::DataBase():
 	m_pSQLiteDB(nullptr)
@@ -19,12 +20,106 @@ bool DataBase::connect(const std::string &dbFile)
 {
 	int retCode = sqlite3_open(dbFile.c_str(), &m_pSQLiteDB);
 	if (retCode != SQLITE_OK)
+	{
+		Log(CRITICAL, "Failed to open the database file " + dbFile);
 		return false;
+	}
+
+	// Make sure we have all the tables
+	if (!doesTableExist("tblCoins"))
+	{
+		if (!createCoinTable())
+		{
+			Log(CRITICAL, "Failed to create the coin database table");
+			return false;
+		}
+	}
+	if (!doesTableExist("tblProducts"))
+	{
+		if (!createProductTable())
+		{
+			Log(CRITICAL, "Failed to create the product database table");
+			return false;
+		}
+	}
+	if (!doesTableExist("tblOneMinutePrices"))
+	{
+		if (!createPriceTable())
+		{
+			Log(CRITICAL, "Failed to create the prices database table");
+			return false;
+		}
+	}
 
 	// Set some options to speed up inserts
 	bool bRet = setPragma("journal_mode", "MEMORY");
 	bRet &= setPragma("synchronous", "OFF");
 	return bRet;
+}
+
+bool DataBase::doesTableExist(const std::string &tablename)
+{
+	std::stringstream ss;
+	ss << "SELECT COUNT(name) FROM sqlite_master WHERE type='table' AND name='";
+	ss << tablename << "';";
+
+	int matches;
+	if (!getScaler(ss.str(), matches))
+		return false;
+
+	return (matches == 1);
+}
+
+bool DataBase::createCoinTable()
+{
+	std::string sql = "CREATE TABLE `tblCoins` "
+		"( `id` INTEGER NOT NULL UNIQUE, "
+		"`name` TEXT, "
+		"`description` TEXT, "
+		"`token` TEXT, "
+		"PRIMARY KEY(`id`) )";
+
+	return executeNonQuery(sql);
+}
+
+bool DataBase::createProductTable()
+{
+	std::string sql = "CREATE TABLE 'tblProducts' ( "
+		"`Id` INTEGER NOT NULL UNIQUE, "
+		"`active` INTEGER, "
+		"`baseCoin` INTEGER, "
+		"`decimalPlaces` INTEGER, "
+		"`matchingUnitType` INTEGER, "
+		"`minQty` REAL, "
+		"`minTrade` REAL, "
+		"`quoteCoin` INTEGER, "
+		"`status` INTEGER, "
+		"`symbol` TEXT ( 16 ) NOT NULL UNIQUE, "
+		"`tickSize` INTEGER, "
+		"`withdrawFee` REAL, "
+		"FOREIGN KEY(`baseCoin`) REFERENCES `tblCoins`(`id`), "
+		"FOREIGN KEY(`quoteCoin`) REFERENCES `tblCoins`(`id`), "
+		"PRIMARY KEY(`Id`) )";
+
+	return executeNonQuery(sql);
+}
+
+bool DataBase::createPriceTable()
+{
+	std::string sql = "CREATE TABLE 'tblOneMinutePrices' ( "
+		"`id` INTEGER NOT NULL, "
+		"`openTime` INTEGER, "
+		"`open` REAL, "
+		"`high` REAL, "
+		"`low` REAL, "
+		"`close` REAL, "
+		"`volume` REAL, "
+		"`closeTime` INTEGER, "
+		"`trades` INTEGER, "
+		"UNIQUE(`id`,`openTime`), "
+		"FOREIGN KEY(`id`) REFERENCES `tblProducts`(`Id`) )";
+
+	return executeNonQuery(sql);
 }
 
 bool DataBase::insertCoin(const std::string &name, const std::string &description, const std::string &token)
@@ -544,7 +639,6 @@ bool DataBase::verifyUploads(int &broken)
 	}
 	return (broken == 0);
 }
-
 
 bool DataBase::getScaler(const std::string &sql, int &retValue)
 {
