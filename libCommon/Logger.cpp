@@ -49,12 +49,12 @@ void Logger::log(LogLevel level, const std::string &msg)
 		m_signalLogFile << ss.str();
 		return;
 	}
-	else if (level == LogLevel::POSITION && m_signalLogFile.is_open())
+	else if (level == LogLevel::POSITION && m_positionLogFile.is_open())
 	{
 		m_positionLogFile << ss.str();
 		return;
 	}
-	else if (level == LogLevel::TRADE && m_signalLogFile.is_open())
+	else if (level == LogLevel::TRADE && m_tradeLogFile.is_open())
 	{
 		m_tradeLogFile << ss.str();
 		return;
