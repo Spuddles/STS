@@ -46,19 +46,6 @@ bool BinanceAPI::getTime(uint64_t &timestamp)
 	return true;
 }
 
-std::string BinanceAPI::convertTime(uint64_t &timestamp)
-{
-	int milliseconds = timestamp % 1000;
-	time_t tt = timestamp / 1000;
-	struct tm ts;
-	localtime_s(&ts, &tt);
-
-	char buffer[64];
-	sprintf_s(buffer, 64, "%04d%02d%02d-%02d:%02d:%02d.%04d", ts.tm_year + 1900, ts.tm_mon+1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec, milliseconds);
-
-	return std::string(buffer);
-}
-
 bool BinanceAPI::getHistoricPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices)
 {
 	std::string str = m_pRequests->getHistoricPrices(product, interval, amount);
@@ -193,6 +180,10 @@ bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &v
 		return false;
 	}
 	return true;
-
 }
 
+bool BinanceAPI::getAccountInformation()
+{
+	std::string str = m_pRequests->getAccountInformation();
+	return false;
+}

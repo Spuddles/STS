@@ -52,12 +52,19 @@ public:
 				BinanceAPI(IRequests *pRequests);
 	virtual		~BinanceAPI();
 
+	// UTILITY CALLS
 	bool		getPing();
 	bool		getTime(uint64_t &timestamp);
-	std::string	convertTime(uint64_t &timestamp);
+
+	// PRODUCTS
 	bool		getProducts(std::vector<Product> &products);
+
+	// PRICES
 	bool		getHistoricPrices(std::string product, std::string interval, int amount, std::vector<Price> &vecPrices);
 	bool		getCurrentPrices(std::vector<std::pair<std::string, double>> &vecPricePairs);
+
+	// ACCOUNT DETAILS
+	bool		getAccountInformation();
 
 private:
 	IRequests  *m_pRequests;

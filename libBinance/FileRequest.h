@@ -16,6 +16,8 @@ public:
 	std::string	getProducts();
 	std::string getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount);
 	std::string getCurrentPrices();
+
+	std::string getAccountInformation();
 private:
 	std::string m_Path;
 

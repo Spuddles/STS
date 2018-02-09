@@ -71,6 +71,11 @@ std::string WebSocketRequest::getCurrentPrices()
 	return request("https://www.binance.com/api/v1/ticker/allPrices");
 }
 
+std::string WebSocketRequest::getAccountInformation()
+{
+	return request("https://www.binance.com/api/v3/account");
+}
+
 size_t WebSocketRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	WebSocketRequest *pObject = (WebSocketRequest*)userp;

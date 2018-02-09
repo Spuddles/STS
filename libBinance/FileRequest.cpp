@@ -51,6 +51,11 @@ std::string FileRequest::getCurrentPrices()
 	return loadFile("allPrices.json");
 }
 
+std::string FileRequest::getAccountInformation()
+{
+	return loadFile("accountInformation.json");
+}
+
 std::string FileRequest::loadFile(const std::string &filename)
 {
 	std::string fullpath = m_Path + "\\" + filename;
