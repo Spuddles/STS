@@ -119,10 +119,8 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 
 			p.setMatchingUnitType(i["matchingUnitType"]);
 
-			std::string minQty = i["minQty"];
-			p.setMinQty(atof(minQty.c_str()));
-			std::string minTrade = i["minTrade"];
-			p.setMinTrade(atof(minTrade.c_str()));
+			p.setMinQty(i["minQty"]);
+			p.setMinTrade(i["minTrade"]);
 
 			p.setQuoteAsset(i["quoteAsset"]);
 			p.setQuoteAssetName(i["quoteAssetName"]);
