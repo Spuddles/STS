@@ -21,7 +21,10 @@
     <ClCompile Include="FileRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WebSocketRequest.cpp">
+    <ClCompile Include="CURLRequest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinHTTPRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +41,10 @@
     <ClInclude Include="json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WebSocketRequest.h">
+    <ClInclude Include="CURLRequest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinHTTPRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

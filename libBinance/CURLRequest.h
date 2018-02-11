@@ -3,11 +3,11 @@
 
 typedef void CURL;
 
-class WebSocketRequest: public IRequests
+class CURLRequest: public IRequests
 {
 public:
-				WebSocketRequest();
-	virtual		~WebSocketRequest();
+				CURLRequest();
+	virtual		~CURLRequest();
 
 	std::string	ping();
 	std::string	getTime();

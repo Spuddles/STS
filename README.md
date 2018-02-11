@@ -15,6 +15,8 @@ Take the strategy you wrote earlier and use it to trade live on the binance exch
 ## THINGS TO DO
 * Update the database code to create all the tables when run for the first time.
 * Add the SHA256 and HMAC code to the repo
+* Fix json code to handle strings or doubles as the API keeps changing!
+* Create a WebSocket WinHTTP based class to handle user and public data streams
 * Add list of 3rd party apps to this file
 * Add the code for live trading
     - Send a simple test trade

@@ -86,15 +86,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BinanceAPI.cpp" />
+    <ClCompile Include="CURLRequest.cpp" />
     <ClCompile Include="FileRequest.cpp" />
-    <ClCompile Include="WebSocketRequest.cpp" />
+    <ClCompile Include="WinHTTPRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinanceAPI.h" />
+    <ClInclude Include="CURLRequest.h" />
     <ClInclude Include="FileRequest.h" />
     <ClInclude Include="IRequests.h" />
     <ClInclude Include="json.hpp" />
-    <ClInclude Include="WebSocketRequest.h" />
+    <ClInclude Include="WinHTTPRequest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

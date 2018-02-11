@@ -1,9 +1,9 @@
-#include "WebSocketRequest.h"
+#include "CURLRequest.h"
 #include <iostream>
 #include <sstream>
 #include "curl/curl.h"
 
-WebSocketRequest::WebSocketRequest()
+CURLRequest::CURLRequest()
 {
 	// Initialise CURL library
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -15,7 +15,7 @@ WebSocketRequest::WebSocketRequest()
 	m_pBuffer = new char[m_BufferSize];
 }
 
-WebSocketRequest::~WebSocketRequest()
+CURLRequest::~CURLRequest()
 {
 	// cleanup curl stuff
 	curl_easy_cleanup(m_pCurlHandle);
@@ -25,37 +25,37 @@ WebSocketRequest::~WebSocketRequest()
 	delete m_pBuffer;
 }
 
-std::string WebSocketRequest::ping()
+std::string CURLRequest::ping()
 {
 	return request("https://api.binance.com/api/v1/ping");
 }
 
-std::string WebSocketRequest::getTime()
+std::string CURLRequest::getTime()
 {
 	return request("https://api.binance.com/api/v1/time");
 }
 
-std::string WebSocketRequest::getMarketDepth(const std::string &pair, unsigned int depth)
+std::string CURLRequest::getMarketDepth(const std::string &pair, unsigned int depth)
 {
 	return request("https://api.binance.com/api/v1/depth?symbol=LTCBTC&limit=5");
 }
 
-std::string WebSocketRequest::getPairsPricesVolume()
+std::string CURLRequest::getPairsPricesVolume()
 {
 	return request("");
 }
 
-std::string WebSocketRequest::getPairsPrices()
+std::string CURLRequest::getPairsPrices()
 {
 	return request("");
 }
 
-std::string WebSocketRequest::getProducts()
+std::string CURLRequest::getProducts()
 {
 	return request("https://www.binance.com/exchange/public/product");
 }
 
-std::string WebSocketRequest::getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
+std::string CURLRequest::getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount)
 {
 	std::stringstream ss;
 	ss << "https://www.binance.com/api/v1/klines?symbol=";
@@ -66,26 +66,26 @@ std::string WebSocketRequest::getHistoricPrices(const std::string &symbol, const
 	return request(ss.str());
 }
 
-std::string WebSocketRequest::getCurrentPrices()
+std::string CURLRequest::getCurrentPrices()
 {
 	return request("https://www.binance.com/api/v1/ticker/allPrices");
 }
 
-std::string WebSocketRequest::getAccountInformation()
+std::string CURLRequest::getAccountInformation()
 {
 	return request("https://www.binance.com/api/v3/account");
 }
 
-size_t WebSocketRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
+size_t CURLRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
 {
-	WebSocketRequest *pObject = (WebSocketRequest*)userp;
+	CURLRequest *pObject = (CURLRequest*)userp;
 
 	pObject->writeMemoryCallback(contents, size, nmemb);
 
 	return size * nmemb;
 }
 
-void WebSocketRequest::writeMemoryCallback(void *contents, size_t size, size_t nmemb)
+void CURLRequest::writeMemoryCallback(void *contents, size_t size, size_t nmemb)
 {
 	size_t realsize = size * nmemb;
 
@@ -106,11 +106,11 @@ void WebSocketRequest::writeMemoryCallback(void *contents, size_t size, size_t n
 	return;
 }
 
-std::string WebSocketRequest::request(const std::string &url)
+std::string CURLRequest::request(const std::string &url)
 {
 //	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, WebSocketRequest::writeMemoryCallbackStatic);
+	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, CURLRequest::writeMemoryCallbackStatic);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEDATA, (void *)this);
 	m_BufferOffset = 0;
 
