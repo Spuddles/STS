@@ -19,5 +19,6 @@ public:
 	virtual std::string getCurrentPrices() = 0;
 
 	virtual std::string getRequest(const std::string &url) = 0;
+	virtual std::string getRequest(const std::string &url, const std::string &verb, const std::string &key) = 0;
 };
 

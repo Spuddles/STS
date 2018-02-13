@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AccountInfo.cpp" />
     <ClCompile Include="BollingerBand.cpp" />
     <ClCompile Include="CrumbleStrategy.cpp" />
     <ClCompile Include="Exchange.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="WeightedMovingAverage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AccountInfo.h" />
     <ClInclude Include="BollingerBand.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="CrumbleStrategy.h" />

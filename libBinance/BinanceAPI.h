@@ -3,6 +3,7 @@
 #include "IRequests.h"
 #include "Price.h"
 #include "Product.h"
+#include "AccountInfo.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -54,6 +55,7 @@ class BinanceAPI
 public:
 				BinanceAPI(IRequests *pRequests);
 	virtual		~BinanceAPI();
+	void		setKeys(const std::string &api, const std::string &secret);
 
 	// UTILITY CALLS
 	bool		getPing();
@@ -67,13 +69,17 @@ public:
 	bool		getCurrentPrices(std::vector<std::pair<std::string, double>> &vecPricePairs);
 
 	// ACCOUNT DETAILS
-	bool		getAccountInformation();
+	bool		getAccountInformation(AccountInfo &ai);
 
 	// USER STREAMS
-	std::string	getListenKey();
-	std::string keepAliveListenKey(const std::string &key);
+	bool		getListenKey(std::string &listenKey);
+	bool		keepAliveListenKey(const std::string &key);
+	bool		closeListeningKey(const std::string &key);
 
-	void		setKeys(const std::string &api, const std::string &secret);
+	// TRADES
+	bool		sendNewOrder();
+	bool		sendNewTestOrder();
+	bool		cancelOrder();
 
 private:
 	// Binance is not consistent with double values in json,

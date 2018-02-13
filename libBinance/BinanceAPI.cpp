@@ -1,6 +1,7 @@
 #include "BinanceAPI.h"
 #include "sha256.h"
 #include "hmac.h"
+#include "Helpers.h"
 
 #include <iostream>
 #include <time.h>
@@ -165,28 +166,98 @@ bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &v
 	return true;
 }
 
-bool BinanceAPI::getAccountInformation()
+bool BinanceAPI::getAccountInformation(AccountInfo &ai)
 {
 	// Build up the request
+	std::string url = "https://www.binance.com/api/v3/account?";
+
 	std::stringstream ss;
-	ss << "https://www.binance.com/api/v1/account";
-	ss << "key=" << m_apiKey;
-	ss << "signature=" << m_apiKey;
+	ss << "timestamp=";
+	ss << Helpers::getCurrentTimestamp();
+	std::string signature = hmac<SHA256>(ss.str(), m_secretKey);
+	ss << "&signature=" << signature;
 
-	std::string result = hmac<SHA256>(ss.str(), m_apiKey);
+	std::string str = m_pRequests->getRequest(url + ss.str(), "GET", m_apiKey);
 
-	m_pRequests->getRequest(ss.str());
-	return false;
+	if (str.empty())
+		return false;
+
+	try
+	{
+		json j = json::parse(str);
+
+		ai.setCanTrade(j["canTrade"]);
+		ai.setCanWithdraw(j["canWithdraw"]);
+		ai.setCanDeposit(j["canDeposit"]);
+
+		json b = j["balances"];
+
+		for (json::iterator it = b.begin(); it != b.end(); ++it)
+		{
+			json &h = (*it);
+
+			std::cout << h.dump() << std::endl;
+
+			std::string coin = h["asset"];
+			double free = getDouble(h, "free");
+			double locked = getDouble(h, "locked");
+
+			ai.insertHolding(coin, free, locked);
+		}
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
 }
 
-std::string	BinanceAPI::getListenKey()
+bool BinanceAPI::getListenKey(std::string &listenKey)
 {
-	return "";
+	std::string url = "https://www.binance.com/api/v1/userDataStream";
+
+	std::string str = m_pRequests->getRequest(url, "POST", m_apiKey);
+
+	if (str.empty())
+		return false;
+
+	try
+	{
+		json j = json::parse(str);
+
+		listenKey = j["listenKey"];
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
 }
 
-std::string BinanceAPI::keepAliveListenKey(const std::string & /*key*/)
+bool BinanceAPI::keepAliveListenKey(const std::string &key)
 {
-	return "";
+	std::stringstream ss;
+	
+	ss << "https://www.binance.com/api/v1/userDataStream?";
+	ss << "listenKey=" << key;
+
+	std::string str = m_pRequests->getRequest(ss.str(), "PUT", m_apiKey);
+
+	return (!str.empty() && (str.find("{}") != std::string::npos) );
+}
+
+bool BinanceAPI::closeListeningKey(const std::string &key)
+{
+	std::stringstream ss;
+
+	ss << "https://www.binance.com/api/v1/userDataStream?";
+	ss << "listenKey=" << key;
+
+	std::string str = m_pRequests->getRequest(ss.str(), "DELETE", m_apiKey);
+
+	return (!str.empty() && (str.find("{}") != std::string::npos));
 }
 
 double BinanceAPI::getDouble(const json &j, const std::string &field)
