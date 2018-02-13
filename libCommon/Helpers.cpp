@@ -26,6 +26,15 @@ std::string Helpers::getCurrentTime()
 	return buffer;
 }
 
+uint64_t Helpers::getCurrentTimestamp()
+{
+	auto now = std::chrono::system_clock::now();
+	time_t tt;
+	tt = std::chrono::system_clock::to_time_t(now);
+	uint64_t ts = tt * 1000;
+	return ts;
+}
+
 bool Helpers::doesFileExist(const std::string & /*filename*/)
 {
 	return false;
