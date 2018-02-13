@@ -80,6 +80,11 @@ std::string CURLRequest::getRequest(const std::string &url)
 	return request(url);
 }
 
+std::string CURLRequest::getRequest(const std::string &url, const std::string &verb, const std::string &key)
+{
+	return request(url, verb, key);
+}
+
 size_t CURLRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	CURLRequest *pObject = (CURLRequest*)userp;
@@ -117,12 +122,12 @@ std::string CURLRequest::request(const std::string &url)
 
 std::string CURLRequest::request(const std::string &url, const std::string &verb, const std::string &publicKey)
 {
-	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
+//	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
 
 	if (!publicKey.empty())
 	{
 		struct curl_slist *chunk = NULL;
-		std::string key = "X-API-KEY:" + publicKey;
+		std::string key = "X-MBX-APIKEY:" + publicKey;
 		chunk = curl_slist_append(chunk, key.c_str());
 		curl_easy_setopt(m_pCurlHandle, CURLOPT_HTTPHEADER, chunk);
 	}

@@ -19,6 +19,7 @@ public:
 	std::string getCurrentPrices();
 
 	std::string getRequest(const std::string &url);
+	std::string getRequest(const std::string &url, const std::string &verb, const std::string &publicKey);
 
 	std::string request(const std::string &url);
 	std::string request(const std::string &url, const std::string &verb, const std::string &publicKey);
