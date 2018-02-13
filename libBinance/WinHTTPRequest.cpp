@@ -37,7 +37,6 @@ bool WinHTTPRequest::initialise(const WCHAR *stream)
 	if (!completeUpgrade())
 		return false;
 
-	receiveWebSocketStream();
 	return true;
 }
 
@@ -156,24 +155,35 @@ bool WinHTTPRequest::completeUpgrade()
 	return true;
 }
 
-void WinHTTPRequest::receiveWebSocketStream()
+void WinHTTPRequest::receiveDataStatic(void *pThis)
 {
-	// Kick off a new thread to poll the connection and 
-	// handle data when it arrives
+	WinHTTPRequest *wr = static_cast<WinHTTPRequest*>(pThis);
+
 	char	*lpOutput = new char[65536];
 	DWORD	dwBytesTransferred;
 	WINHTTP_WEB_SOCKET_BUFFER_TYPE eBufferType = WINHTTP_WEB_SOCKET_BINARY_MESSAGE_BUFFER_TYPE;
-	for (int i = 0; i < 100000; i++)
+	while (true)
 	{
-		m_dwError = WinHttpWebSocketReceive(m_hWebSocketHandle,
-			lpOutput,65536, &dwBytesTransferred,
-			&eBufferType);
-		if (m_dwError != ERROR_SUCCESS)
+		// This call is blocking so it will wait for data
+		wr->m_dwError = WinHttpWebSocketReceive(wr->m_hWebSocketHandle,
+			lpOutput, 65536, &dwBytesTransferred, &eBufferType);
+		if (wr->m_dwError != ERROR_SUCCESS)
 		{
 			return;
 		}
 		lpOutput[dwBytesTransferred] = 0;
 		std::cout << (char*)lpOutput << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		wr->m_receiver->dataReceived(lpOutput);
 	}
+}
+
+void WinHTTPRequest::receiveWebSocketStream(IStreamReceiver *receiver)
+{
+	m_receiver = receiver;
+
+	// Kick off a new thread to poll the connection and 
+	// handle data when it arrives
+
+
+
 }

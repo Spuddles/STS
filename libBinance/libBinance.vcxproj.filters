@@ -47,5 +47,8 @@
     <ClInclude Include="WinHTTPRequest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IStreamReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

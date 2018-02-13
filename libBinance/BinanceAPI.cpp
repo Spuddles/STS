@@ -1,5 +1,6 @@
 #include "BinanceAPI.h"
-#include "json.hpp"
+#include "sha256.h"
+#include "hmac.h"
 
 #include <iostream>
 #include <time.h>
@@ -57,24 +58,17 @@ bool BinanceAPI::getHistoricPrices(std::string product, std::string interval, in
 	{
 		json j = json::parse(str);
 
-		size_t items = j.size();
-
 		for (json::iterator it = j.begin(); it != j.end(); ++it)
 		{
 			Price price;
 			json &p = (*it);
 
 			price.setOpenTime(p[0]);
-			std::string openstr = p[1];
-			price.setOpen(atof(openstr.c_str()));
-			std::string highstr = p[2];
-			price.setHigh(atof(highstr.c_str()));
-			std::string lowstr = p[3];
-			price.setLow(atof(lowstr.c_str()));
-			std::string closestr = p[4];
-			price.setClose(atof(closestr.c_str()));
-			std::string volumestr = p[5];
-			price.setVolume(atof(volumestr.c_str()));
+			price.setOpen(getDouble(p, 1));
+			price.setHigh(getDouble(p, 2));
+			price.setLow(getDouble(p, 3));
+			price.setClose(getDouble(p, 4));
+			price.setVolume(getDouble(p, 5));
 			price.setCloseTime(p[6]);
 			price.setTrades(p[8]);
 
@@ -98,14 +92,11 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 
 	json j = json::parse(str);
 
-	size_t items = j.size();
-
 	json jj = j["data"];
 
 	for (json::iterator it = jj.begin();it != jj.end();++it)
 	{
 		Product p;
-
 		json &i = (*it);
 
 		try
@@ -119,8 +110,8 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 
 			p.setMatchingUnitType(i["matchingUnitType"]);
 
-			p.setMinQty(i["minQty"]);
-			p.setMinTrade(i["minTrade"]);
+			p.setMinQty(getDouble(i, "minQty"));
+			p.setMinTrade(getDouble(i, "minTrade"));
 
 			p.setQuoteAsset(i["quoteAsset"]);
 			p.setQuoteAssetName(i["quoteAssetName"]);
@@ -128,11 +119,8 @@ bool BinanceAPI::getProducts(std::vector<Product> &products)
 			p.setStatus(i["status"]);
 			p.setSymbol(i["symbol"]);
 
-			std::string tickSize = (*it)["tickSize"];
-			p.setTickSize(atof(tickSize.c_str()));
-
-			std::string withdrawFee = (*it)["withdrawFee"];
-			p.setWithdrawFee(atof(withdrawFee.c_str()));
+			p.setTickSize(getDouble(i, "tickSize"));
+			p.setWithdrawFee(getDouble(i, "withdrawFee"));
 
 			products.push_back(p);
 		}
@@ -157,8 +145,6 @@ bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &v
 	{
 		json j = json::parse(str);
 
-		size_t items = j.size();
-
 		for (json::iterator it = j.begin(); it != j.end(); ++it)
 		{
 			json &p = (*it);
@@ -166,8 +152,7 @@ bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &v
 			std::cout << p.dump() << std::endl;
 
 			std::string symbol = p["symbol"];
-			std::string priceStr = p["price"];
-			double price = atof(priceStr.c_str());
+			double price = getDouble(p, "price");
 
 			vecPricePairs.push_back(std::pair<std::string, double>(symbol, price));
 		}
@@ -182,6 +167,50 @@ bool BinanceAPI::getCurrentPrices(std::vector<std::pair<std::string, double>> &v
 
 bool BinanceAPI::getAccountInformation()
 {
-	std::string str = m_pRequests->getAccountInformation();
+	// Build up the request
+	std::stringstream ss;
+	ss << "https://www.binance.com/api/v1/account";
+	ss << "key=" << m_apiKey;
+	ss << "signature=" << m_apiKey;
+
+	std::string result = hmac<SHA256>(ss.str(), m_apiKey);
+
+	m_pRequests->getRequest(ss.str());
 	return false;
+}
+
+std::string	BinanceAPI::getListenKey()
+{
+	return "";
+}
+
+std::string BinanceAPI::keepAliveListenKey(const std::string & /*key*/)
+{
+	return "";
+}
+
+double BinanceAPI::getDouble(const json &j, const std::string &field)
+{
+	if (j[field].is_string())
+	{
+		std::string str = j[field];
+		return atof(str.c_str());
+	}
+	return j[field];
+}
+
+double BinanceAPI::getDouble(const json &j, unsigned int offset)
+{
+	if (j[offset].is_string())
+	{
+		std::string str = j[offset];
+		return atof(str.c_str());
+	}
+	return j[offset];
+}
+
+void BinanceAPI::setKeys(const std::string &api, const std::string &secret)
+{
+	m_apiKey = api;
+	m_secretKey = secret;
 }

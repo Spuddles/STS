@@ -18,6 +18,6 @@ public:
 	virtual std::string getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount) = 0;
 	virtual std::string getCurrentPrices() = 0;
 
-	virtual std::string getAccountInformation() = 0;
+	virtual std::string getRequest(const std::string &url) = 0;
 };
 

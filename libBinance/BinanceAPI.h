@@ -3,6 +3,9 @@
 #include "IRequests.h"
 #include "Price.h"
 #include "Product.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 enum INTERVAL
 {
@@ -66,7 +69,22 @@ public:
 	// ACCOUNT DETAILS
 	bool		getAccountInformation();
 
+	// USER STREAMS
+	std::string	getListenKey();
+	std::string keepAliveListenKey(const std::string &key);
+
+	void		setKeys(const std::string &api, const std::string &secret);
+
 private:
+	// Binance is not consistent with double values in json,
+	// some are stored as numerics while others are strings.
+	// These methods handles both cases
+	double		getDouble(const json &j, const std::string &field);
+	double		getDouble(const json &j, unsigned int offset);
+
 	IRequests  *m_pRequests;
+
+	std::string	m_apiKey;
+	std::string	m_secretKey;
 };
 

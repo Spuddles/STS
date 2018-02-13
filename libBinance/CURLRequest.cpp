@@ -37,7 +37,11 @@ std::string CURLRequest::getTime()
 
 std::string CURLRequest::getMarketDepth(const std::string &pair, unsigned int depth)
 {
-	return request("https://api.binance.com/api/v1/depth?symbol=LTCBTC&limit=5");
+	std::stringstream ss;
+
+	ss << "https://api.binance.com/api/v1/depth?symbol=";
+	ss << pair << "&limit=" << depth;
+	return request(ss.str());
 }
 
 std::string CURLRequest::getPairsPricesVolume()
@@ -71,9 +75,9 @@ std::string CURLRequest::getCurrentPrices()
 	return request("https://www.binance.com/api/v1/ticker/allPrices");
 }
 
-std::string CURLRequest::getAccountInformation()
+std::string CURLRequest::getRequest(const std::string &url)
 {
-	return request("https://www.binance.com/api/v3/account");
+	return request(url);
 }
 
 size_t CURLRequest::writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp)
@@ -108,8 +112,23 @@ void CURLRequest::writeMemoryCallback(void *contents, size_t size, size_t nmemb)
 
 std::string CURLRequest::request(const std::string &url)
 {
-//	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
+	return request(url, "GET", "");
+}
+
+std::string CURLRequest::request(const std::string &url, const std::string &verb, const std::string &publicKey)
+{
+	curl_easy_setopt(m_pCurlHandle, CURLOPT_VERBOSE, 1L);
+
+	if (!publicKey.empty())
+	{
+		struct curl_slist *chunk = NULL;
+		std::string key = "X-API-KEY:" + publicKey;
+		chunk = curl_slist_append(chunk, key.c_str());
+		curl_easy_setopt(m_pCurlHandle, CURLOPT_HTTPHEADER, chunk);
+	}
+
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(m_pCurlHandle, CURLOPT_CUSTOMREQUEST, verb.c_str());
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEFUNCTION, CURLRequest::writeMemoryCallbackStatic);
 	curl_easy_setopt(m_pCurlHandle, CURLOPT_WRITEDATA, (void *)this);
 	m_BufferOffset = 0;

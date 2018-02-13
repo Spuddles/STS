@@ -11,10 +11,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiveTrader", "LiveTrader.vc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBinance", "..\libBinance\libBinance.vcxproj", "{02D201C4-1BFF-43AF-AC84-7C8361F90CF4}"
 	ProjectSection(ProjectDependencies) = postProject
+		{37AF8610-B3DE-4087-9956-AC248A436804} = {37AF8610-B3DE-4087-9956-AC248A436804}
 		{5133DA50-EF3A-4F6B-921F-4BD4B9176508} = {5133DA50-EF3A-4F6B-921F-4BD4B9176508}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCommon", "..\libCommon\libCommon.vcxproj", "{5133DA50-EF3A-4F6B-921F-4BD4B9176508}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libHash", "..\libHash\libHash.vcxproj", "{37AF8610-B3DE-4087-9956-AC248A436804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +37,10 @@ Global
 		{5133DA50-EF3A-4F6B-921F-4BD4B9176508}.Debug|x64.Build.0 = Debug|x64
 		{5133DA50-EF3A-4F6B-921F-4BD4B9176508}.Release|x64.ActiveCfg = Release|x64
 		{5133DA50-EF3A-4F6B-921F-4BD4B9176508}.Release|x64.Build.0 = Release|x64
+		{37AF8610-B3DE-4087-9956-AC248A436804}.Debug|x64.ActiveCfg = Debug|x64
+		{37AF8610-B3DE-4087-9956-AC248A436804}.Debug|x64.Build.0 = Debug|x64
+		{37AF8610-B3DE-4087-9956-AC248A436804}.Release|x64.ActiveCfg = Release|x64
+		{37AF8610-B3DE-4087-9956-AC248A436804}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

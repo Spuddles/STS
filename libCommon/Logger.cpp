@@ -64,22 +64,22 @@ void Logger::log(LogLevel level, const std::string &msg)
 
 void Logger::setLogLevel(LogLevel level)
 {
-
+	m_logLevel = level;
 }
 
 void Logger::setTradeLog(const std::string &filename)
 {
-
+	m_tradeLogFile.open(filename, std::ios::out);
 }
 
 void Logger::setPositionLog(const std::string &filename)
 {
-
+	m_positionLogFile.open(filename, std::ios::out);
 }
 
 void Logger::setSignalLog(const std::string &filename)
 {
-
+	m_signalLogFile.open(filename, std::ios::out);
 }
 
 std::string Logger::getLogLevelStr(LogLevel level)

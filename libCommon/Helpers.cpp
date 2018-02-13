@@ -26,7 +26,7 @@ std::string Helpers::getCurrentTime()
 	return buffer;
 }
 
-bool Helpers::doesFileExist(const std::string &filename)
+bool Helpers::doesFileExist(const std::string & /*filename*/)
 {
 	return false;
 }

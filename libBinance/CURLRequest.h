@@ -18,9 +18,10 @@ public:
 	std::string getHistoricPrices(const std::string &symbol, const std::string &interval, unsigned int amount);
 	std::string getCurrentPrices();
 
-	std::string getAccountInformation();
+	std::string getRequest(const std::string &url);
 
 	std::string request(const std::string &url);
+	std::string request(const std::string &url, const std::string &verb, const std::string &publicKey);
 
 	static	size_t	writeMemoryCallbackStatic(void *contents, size_t size, size_t nmemb, void *userp);
 	void			writeMemoryCallback(void *contents, size_t size, size_t nmemb);

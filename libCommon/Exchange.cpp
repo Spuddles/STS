@@ -26,7 +26,6 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 		Order o = m_vecOrders[i];
 		if (o.getProduct().getID() == id)
 		{
-			bool c = o.getAmount() < p.getVolume();
 			if (o.isBuy() && o.getPrice() > p.getLow() && o.getAmount() < p.getVolume())
 			{
 				m_Portfolio.addFilledOrder(o);
