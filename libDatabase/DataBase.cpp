@@ -315,7 +315,7 @@ bool DataBase::getAllProducts(std::vector<Product> &vecProducts)
 			p.setID(sqlite3_column_int(pStatement, 0));
 			p.setActive( (sqlite3_column_int(pStatement, 1)==1) );
 			p.setBaseCoin(sqlite3_column_int(pStatement, 2));
-			p.setDecimalPlaces(sqlite3_column_int(pStatement, 3));
+			p.setDecimalPlaces((uint8_t)sqlite3_column_int(pStatement, 3));
 			p.setMatchingUnitType(sqlite3_column_text(pStatement, 4));
 			p.setMinQty(sqlite3_column_int(pStatement, 5));
 			p.setMinTrade(sqlite3_column_int(pStatement, 6));
@@ -381,7 +381,7 @@ bool DataBase::getProduct(unsigned int id, Product &product)
 			product.setID(sqlite3_column_int(pStatement, 0));
 			product.setActive((sqlite3_column_int(pStatement, 1) == 1));
 			product.setBaseCoin(sqlite3_column_int(pStatement, 2));
-			product.setDecimalPlaces(sqlite3_column_int(pStatement, 3));
+			product.setDecimalPlaces((uint8_t)sqlite3_column_int(pStatement, 3));
 			product.setMatchingUnitType(sqlite3_column_text(pStatement, 4));
 			product.setMinQty(sqlite3_column_int(pStatement, 5));
 			product.setMinTrade(sqlite3_column_int(pStatement, 6));
