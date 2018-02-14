@@ -35,9 +35,10 @@ uint64_t Helpers::getCurrentTimestamp()
 	return ts;
 }
 
-bool Helpers::doesFileExist(const std::string & /*filename*/)
+bool Helpers::doesFileExist(const std::string &filename)
 {
-	return false;
+	std::ifstream f(filename.c_str());
+	return f.good();
 }
 
 std::string Helpers::convertTime(const uint64_t &timestamp)

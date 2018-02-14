@@ -13,7 +13,7 @@ public:
 			DataBase();
 	virtual ~DataBase();
 
-	bool	connect(const std::string &dbFile);
+	bool	connect(const std::string &dbFile, bool bCreateIfEmpty=false);
 	bool	doesTableExist(const std::string &tablename);
 
 	// TABLE CREATION

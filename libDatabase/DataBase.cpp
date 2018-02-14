@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include "Logger.h"
+#include "Helpers.h"
 
 DataBase::DataBase():
 	m_pSQLiteDB(nullptr)
@@ -16,8 +17,14 @@ DataBase::~DataBase()
 	}
 }
 
-bool DataBase::connect(const std::string &dbFile)
+bool DataBase::connect(const std::string &dbFile, bool bCreateIfEmpty)
 {
+	// See if we expect to have a file already
+	if (!bCreateIfEmpty && !Helpers::doesFileExist(dbFile))
+	{
+		return false;
+	}
+
 	int retCode = sqlite3_open(dbFile.c_str(), &m_pSQLiteDB);
 	if (retCode != SQLITE_OK)
 	{
