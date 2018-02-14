@@ -1,15 +1,3 @@
-x64\Debug\BackTest.exe -DB ..\Trading.sqlite -CONFIG ..\strategyConfigs\Crumble-ADA.json
-type Crumble-ADA.log | find "POSITION, BTC" > Position-ADA.csv
-
-x64\Debug\BackTest.exe -DB ..\Trading.sqlite -CONFIG ..\strategyConfigs\Crumble-ADX.json
-type Crumble-ADX.log | find "POSITION, BTC" > Position-ADX.csv
-
-x64\Debug\BackTest.exe -DB ..\Trading.sqlite -CONFIG ..\strategyConfigs\Crumble-AION.json
-type Crumble-AION.log | find "POSITION, BTC" > Position-AION.csv
-
-x64\Debug\BackTest.exe -DB ..\Trading.sqlite -CONFIG ..\strategyConfigs\Crumble-AMB.json
-type Crumble-AMB.log | find "POSITION, BTC" > Position-AMB.csv
-
 x64\Debug\BackTest.exe -DB ..\Trading.sqlite -CONFIG ..\strategyConfigs\Crumble-BNB.json
 type Crumble-BNB.log | find "POSITION, BTC" > Position-BNB.csv
 
