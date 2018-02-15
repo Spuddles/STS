@@ -8,6 +8,41 @@
 
 using json = nlohmann::json;
 
+enum eSide
+{
+	BUY = 0,
+	SELL = 1
+};
+
+enum eType
+{
+	LIMIT = 0,
+	MARKET,
+	STOP_LOSS,
+	STOP_LOSS_LIMIT,
+	TAKE_PROFIT,
+	TAKE_PROFIT_LIMIT,
+	LIMIT_MAKER
+};
+
+enum eTimeInForce
+{
+	GTC = 0,
+	IOC,
+	FOK
+};
+
+enum eStatus
+{
+	NEW = 0,
+	PARTIALLY_FILLED,
+	FILLED,
+	CANCELED,
+	PENDING_CANCEL,
+	REJECTED,
+	EXPIRED
+};
+
 enum INTERVAL
 {
 	ONEMIN,
@@ -77,9 +112,11 @@ public:
 	bool		closeListeningKey(const std::string &key);
 
 	// TRADES
-	bool		sendNewOrder();
-	bool		sendNewTestOrder();
-	bool		cancelOrder();
+	bool		sendNewLimitOrder(const std::string &symbol, eSide side, eType type,
+								eTimeInForce timeInForce, double quantity, double price);
+	bool		sendNewLimitTestOrder(const std::string &symbol, eSide side, eType type,
+								eTimeInForce timeInForce, double quantity, double price);
+	bool		cancelOrder(const std::string &symbol, const std::string &orderID);
 
 private:
 	// Binance is not consistent with double values in json,
@@ -87,6 +124,11 @@ private:
 	// These methods handles both cases
 	double		getDouble(const json &j, const std::string &field);
 	double		getDouble(const json &j, unsigned int offset);
+
+	// enum convertion routines
+	std::string	getSideStr(eSide side) const;
+	std::string getTypeStr(eType type) const;
+	std::string getTimeInForceStr(eTimeInForce tif) const;
 
 	IRequests  *m_pRequests;
 

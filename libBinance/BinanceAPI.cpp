@@ -285,3 +285,126 @@ void BinanceAPI::setKeys(const std::string &api, const std::string &secret)
 	m_apiKey = api;
 	m_secretKey = secret;
 }
+
+bool BinanceAPI::sendNewLimitOrder(const std::string &symbol,
+									eSide side,
+									eType type,
+									eTimeInForce timeInForce,
+									double quantity,
+									double price)
+{
+	std::string url = "https://www.binance.com/api/v3/order?";
+
+	std::stringstream ss;
+	ss << "symbol=" << symbol;
+	ss << "&side=" << getSideStr(side);
+	ss << "&type=" << getTypeStr(type);
+	ss << "&timeInForce=" << getTimeInForceStr(timeInForce);
+	ss << "&quantity=" << quantity;
+	ss << "&price=" << price;
+
+	// I only care that the order has been accepted as I hope to get
+	// the execute results on the user stream
+	ss << "&newOrderRespType=ACK";
+	ss << "&timestamp=" << Helpers::getCurrentTimestamp();
+	std::string signature = hmac<SHA256>(ss.str(), m_secretKey);
+	ss << "&signature=" << signature;
+
+	std::string str = m_pRequests->getRequest(url + ss.str(), "POST", m_apiKey);
+
+	if (str.empty())
+		return false;
+
+	try
+	{
+		json j = json::parse(str);
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool BinanceAPI::sendNewLimitTestOrder(const std::string &symbol,
+	eSide side,
+	eType type,
+	eTimeInForce timeInForce,
+	double quantity,
+	double price)
+{
+	std::string url = "https://www.binance.com/api/v3/order/test?";
+
+	std::stringstream ss;
+	ss << "symbol=" << symbol;
+	ss << "&side=" << getSideStr(side);
+	ss << "&type=" << getTypeStr(type);
+	ss << "&timeInForce=" << getTimeInForceStr(timeInForce);
+	ss << "&quantity=" << quantity;
+	ss << "&price=" << price;
+	ss << "&timestamp=" << Helpers::getCurrentTimestamp();
+	std::string signature = hmac<SHA256>(ss.str(), m_secretKey);
+	ss << "&signature=" << signature;
+
+	std::string str = m_pRequests->getRequest(url + ss.str(), "POST", m_apiKey);
+
+	if (str.empty())
+		return false;
+
+	try
+	{
+		json j = json::parse(str);
+	}
+	catch (std::exception &ex)
+	{
+		std::cout << "Exception: " << ex.what() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+bool BinanceAPI::cancelOrder(const std::string &symbol, const std::string &orderID)
+{
+	std::string url = "https://www.binance.com/api/v3/order?";
+
+	std::stringstream ss;
+
+	return false;
+}
+
+std::string BinanceAPI::getSideStr(eSide side) const
+{
+	switch (side)
+	{
+	case BUY:	return "BUY";
+	case SELL:	return "SELL";
+	default:	assert(false);
+	}
+}
+
+std::string BinanceAPI::getTypeStr(eType type) const
+{
+	switch (type)
+	{
+	case LIMIT:				return "LIMIT";
+	case MARKET:			return "MARKET";
+	case STOP_LOSS:			return "STOP_LOSS";
+	case STOP_LOSS_LIMIT:	return "STOP_LOSS_LIMIT";
+	case TAKE_PROFIT:		return "TAKE_PROFIT";
+	case TAKE_PROFIT_LIMIT:	return "TAKE_PROFIT_LIMIT";
+	case LIMIT_MAKER:		return "LIMIT_MAKER";
+	default: assert(false);
+	}
+}
+
+std::string BinanceAPI::getTimeInForceStr(eTimeInForce tif) const
+{
+	switch (tif)
+	{
+		case GTC:	return "GTC";
+		case IOC:	return "IOC";
+		case FOK:	return "FOK";
+		default:	assert(false);
+	}
+}
