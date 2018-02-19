@@ -1,6 +1,6 @@
 #include "MovingAverage.h"
 
-
+using namespace STS;
 
 MovingAverage::MovingAverage(int timePeriods) :
 	m_timePeriods(timePeriods),
@@ -30,7 +30,7 @@ double MovingAverage::updatePrice(double price)
 	return m_lastAverage;
 }
 
-double MovingAverage::getAverage()
+double MovingAverage::getAverage() const
 {
 	return m_lastAverage;
 }

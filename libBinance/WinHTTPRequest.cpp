@@ -172,7 +172,6 @@ void WinHTTPRequest::receiveDataStatic(void *pThis)
 			return;
 		}
 		lpOutput[dwBytesTransferred] = 0;
-		std::cout << (char*)lpOutput << std::endl;
 		wr->m_receiver->dataReceived(lpOutput);
 	}
 }
@@ -183,7 +182,7 @@ void WinHTTPRequest::receiveWebSocketStream(IStreamReceiver *receiver)
 
 	// Kick off a new thread to poll the connection and 
 	// handle data when it arrives
+	m_ReceiveThread = std::thread(receiveDataStatic, this);
 
-
-
+	std::cout << "Finished thread creation method" << std::endl;
 }

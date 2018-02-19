@@ -4,33 +4,35 @@
 #include <string>
 #include "Orders.h"
 
-class Price;
-class Product;
-
-class Portfolio
+namespace STS
 {
-public:
-			Portfolio();
-	virtual ~Portfolio();
+	class Price;
+	class Product;
 
-	void	initialiseFunds(std::vector<Product> &vecProducts);
-	void	initialiseFunds(const Product &product);
-	void	updatePrice(const Price &price);
+	class Portfolio
+	{
+	public:
+		Portfolio();
+		virtual ~Portfolio();
 
-	void	addFunds(unsigned int id, double amount);
-	void	addFilledOrder(const Order &order);
+		void	initialiseFunds(std::vector<Product> &vecProducts);
+		void	initialiseFunds(const Product &product);
+		void	updatePrice(const Price &price);
 
-	bool	canAfford(const Product &prod, double amount, double price);
+		void	addFunds(unsigned int id, double amount);
+		void	addFilledOrder(const Order &order);
 
-	double	getAmount(unsigned int coinID);
-	double	getBTCValue();
+		bool	canAfford(const Product &prod, double amount, double price);
 
-	void	displayPosition();
-	void	displayHistory();
+		double	getAmount(unsigned int coinID);
+		double	getBTCValue();
 
-private:
-	double							m_Price;
-	std::map<unsigned int, double>	m_mapCurrentPosition;
-	std::vector<Order>				m_vecFilledOrders;
-};
+		void	displayPosition();
+		void	displayHistory();
 
+	private:
+		double							m_Price;
+		std::map<unsigned int, double>	m_mapCurrentPosition;
+		std::vector<Order>				m_vecFilledOrders;
+	};
+} // namespace STS

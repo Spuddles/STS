@@ -1,6 +1,8 @@
 #include "WeightedMovingAverage.h"
 #include <cassert>
 
+using namespace STS;
+
 WeightedMovingAverage::WeightedMovingAverage(double weight) :
 	m_Weight(weight),
 	m_WMA(0.0),

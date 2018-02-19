@@ -1,5 +1,7 @@
 #include "BollingerBand.h"
 
+using namespace STS;
+
 BollingerBand::BollingerBand(int timePeriods, double scale):
 	m_MA(timePeriods),
 	m_Variance(timePeriods),

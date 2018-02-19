@@ -1,6 +1,8 @@
 #include "Variance.h"
 #include <cmath>
 
+using namespace STS;
+
 Variance::Variance(int timePoints):
 	m_timePoints(timePoints)
 {

@@ -1,18 +1,21 @@
 #pragma once
 #include "MovingAverage.h"
 
-class Gradient
+namespace STS
 {
-public:
-			Gradient(int timePeriods);
-	virtual ~Gradient();
+	class Gradient
+	{
+	public:
+		Gradient(int timePeriods);
+		virtual ~Gradient();
 
-	void	updatePrice(double price);
-	bool	isGoingUp();
-	bool	isGoingDown();
+		void	updatePrice(double price);
+		bool	isGoingUp() const;
+		bool	isGoingDown() const;
+		double	getValue() const;
 
-private:
-	MovingAverage	m_MA;
-	double			m_previousPrice;
-};
-
+	private:
+		MovingAverage	m_MA;
+		double			m_previousPrice;
+	};
+} // namespace STS

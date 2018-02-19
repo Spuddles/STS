@@ -4,27 +4,29 @@
 #include <vector>
 #include <map>
 
-class Portfolio;
-class Price;
-class Product;
-
-class Exchange
+namespace STS
 {
-public:
-			Exchange(Portfolio &p);
-	virtual ~Exchange();
+	class Portfolio;
+	class Price;
+	class Product;
 
-	void	updatePrice(unsigned int id, const Price &p);
-	bool	placeLimitOrder(Product &product, double amount, const Price &price);
-	bool	placeMarketOrder(Product &product, double amount);
+	class Exchange
+	{
+	public:
+		Exchange(Portfolio &p);
+		virtual ~Exchange();
 
-	int		getLiveOrderCount(unsigned int id);
-	int		minutesSinceLastTrade(uint64_t now);
+		void	updatePrice(unsigned int id, const Price &p);
+		bool	placeLimitOrder(Product &product, double amount, const Price &price);
+		bool	placeMarketOrder(Product &product, double amount);
 
-private:
-	Portfolio						&m_Portfolio;
-	std::map<unsigned int, Price>	m_mapPrices;
-	std::vector<Order>				m_vecOrders;
-	uint64_t						m_lastTradeTime;
-};
+		int		getLiveOrderCount(unsigned int id);
+		int		minutesSinceLastTrade(uint64_t now);
 
+	private:
+		Portfolio & m_Portfolio;
+		std::map<unsigned int, Price>	m_mapPrices;
+		std::vector<Order>				m_vecOrders;
+		uint64_t						m_lastTradeTime;
+	};
+} // namespace STS

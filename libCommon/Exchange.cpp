@@ -2,8 +2,9 @@
 #include "Portfolio.h"
 #include "Price.h"
 #include "Product.h"
-
 #include <iostream>
+
+using namespace STS;
 
 Exchange::Exchange(Portfolio &p) :
 	m_Portfolio(p),

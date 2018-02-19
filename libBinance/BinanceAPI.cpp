@@ -8,6 +8,8 @@
 
 using json = nlohmann::json;
 
+using namespace STS;
+
 BinanceAPI::BinanceAPI(IRequests *pRequests) :
 	m_pRequests(pRequests)
 {
@@ -231,6 +233,7 @@ bool BinanceAPI::getListenKey(std::string &listenKey)
 	catch (std::exception &ex)
 	{
 		std::cout << "Exception: " << ex.what() << std::endl;
+		std::cout << "Return Str = " << str << std::endl;
 		return false;
 	}
 	return true;
@@ -381,6 +384,7 @@ std::string BinanceAPI::getSideStr(eSide side) const
 	case SELL:	return "SELL";
 	default:	assert(false);
 	}
+	return "";
 }
 
 std::string BinanceAPI::getTypeStr(eType type) const
@@ -396,6 +400,7 @@ std::string BinanceAPI::getTypeStr(eType type) const
 	case LIMIT_MAKER:		return "LIMIT_MAKER";
 	default: assert(false);
 	}
+	return "";
 }
 
 std::string BinanceAPI::getTimeInForceStr(eTimeInForce tif) const
@@ -407,4 +412,5 @@ std::string BinanceAPI::getTimeInForceStr(eTimeInForce tif) const
 		case FOK:	return "FOK";
 		default:	assert(false);
 	}
+	return "";
 }

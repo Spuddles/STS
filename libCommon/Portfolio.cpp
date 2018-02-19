@@ -3,6 +3,8 @@
 #include "Price.h"
 #include "Product.h"
 
+using namespace STS;
+
 Portfolio::Portfolio()
 {
 }

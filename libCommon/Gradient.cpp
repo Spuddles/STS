@@ -1,5 +1,7 @@
 #include "Gradient.h"
 
+using namespace STS;
+
 Gradient::Gradient(int timePeriods):
 	m_MA(timePeriods),
 	m_previousPrice(0.0)
@@ -16,13 +18,17 @@ void Gradient::updatePrice(double price)
 	m_MA.updatePrice(price);
 }
 
-bool Gradient::isGoingUp()
+bool Gradient::isGoingUp() const
 {
 	return (m_MA.getAverage() >= m_previousPrice);
 }
 
-bool Gradient::isGoingDown()
+bool Gradient::isGoingDown() const
 {
 	return (m_MA.getAverage() <= m_previousPrice);
 }
 
+double Gradient::getValue() const
+{
+	return m_MA.getAverage();
+}

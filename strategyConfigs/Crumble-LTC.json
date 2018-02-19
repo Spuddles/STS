@@ -4,7 +4,7 @@
 	"symbol"        : "LTCBTC",
     "initialBTC"    : 0.1,
     "orderSize"     : 4,
-    "minOrderGap"   : 20,
+    "minOrderGap"   : 60,
 	"startDate"     : "-1",
     "endDate"       : "-1",
     "logFile"       : "Crumble-LTC.log",

@@ -4,6 +4,8 @@
 #include "Logger.h"
 #include "Helpers.h"
 
+using namespace STS;
+
 DataBase::DataBase():
 	m_pSQLiteDB(nullptr)
 {

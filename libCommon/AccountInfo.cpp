@@ -1,5 +1,7 @@
 #include "AccountInfo.h"
 
+using namespace STS;
+
 AccountInfo::AccountInfo():
 	m_bCanTrade(false),
 	m_bCanWithdraw(false),

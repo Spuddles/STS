@@ -3,6 +3,7 @@
 #include <Windows.h> 
 #include <WinHttp.h> 
 #include "IStreamReceiver.h"
+#include <thread>
 
 #define WSS_BASE_ADDR	L"stream.binance.com"
 #define WSS_BASE_PORT	(9443)
@@ -39,5 +40,7 @@ private:
 
 	// Callback class for sending our data
 	IStreamReceiver	*m_receiver;
+
+	std::thread	m_ReceiveThread;
 };
 

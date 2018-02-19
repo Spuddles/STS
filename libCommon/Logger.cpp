@@ -2,6 +2,8 @@
 #include "Helpers.h"
 #include <sstream>
 
+using namespace STS;
+
 Logger::LogLevel Logger::m_logLevel = LogLevel::NORM;
 std::ofstream	 Logger::m_defaultLogFile;
 std::ofstream	 Logger::m_tradeLogFile;
@@ -59,7 +61,12 @@ void Logger::log(LogLevel level, const std::string &msg)
 		m_tradeLogFile << ss.str();
 		return;
 	}
-	m_defaultLogFile << ss.str();
+	else if (m_defaultLogFile.is_open())
+	{
+		m_defaultLogFile << ss.str();
+		return;
+	}
+	std::cout << ss.str();
 }
 
 void Logger::setLogLevel(LogLevel level)

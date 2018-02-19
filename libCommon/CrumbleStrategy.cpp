@@ -4,8 +4,11 @@
 #include <sstream>
 #include "Logger.h"
 
-CrumbleStrategy::CrumbleStrategy():
-	m_BB(21, 2.0), m_Gradient(1), m_BuySignalCount(0), m_SellSignalCount(0)
+using namespace STS;
+
+CrumbleStrategy::CrumbleStrategy(int intervalsBetweenOrders) :
+	m_BB(21, 2.0), m_Gradient(5), m_BuySignalCount(0), m_SellSignalCount(0),
+	m_intervalsBetweenOrders(intervalsBetweenOrders), m_countDown(0)
 {
 }
 
@@ -19,43 +22,50 @@ void CrumbleStrategy::updatePrice(const Price &price)
 	m_BB.updatePrice(price.getClose());
 	m_Gradient.updatePrice(price.getClose());
 
-	// See if the price is lower than bound to signal a cheap price to buy
-	if (price.getClose() < m_BB.getLowerValue() && m_Gradient.isGoingUp())
+	if (--m_countDown > 0)
 	{
-		m_BuySignalCount++;
+		//m_bBBBuyFlag = false;
+		//m_bBBSellFlag = false;
 	}
 	else
 	{
-		m_BuySignalCount = 0;
-	}
+		// See if the price is lower than bound to signal a cheap price to buy
+		if (price.getClose() < m_BB.getLowerValue())
+		{
+			m_bBBBuyFlag = true;
+			m_bBBSellFlag = false;
+			m_countDown = 5;
+		}
 
-	// See if the price is higher than the upper bound to signal overpriced and good to sell
-	if (price.getClose() > m_BB.getUpperValue() && m_Gradient.isGoingDown())
-	{
-		m_SellSignalCount++;
-	}
-	else
-	{
-		m_SellSignalCount = 0;
+		// See if the price is higher than the upper bound to signal overpriced and good to sell
+		if (price.getClose() > m_BB.getUpperValue())
+		{
+			m_bBBSellFlag = true;
+			m_bBBBuyFlag = false;
+			m_countDown = 5;
+		}
 	}
 
 	std::stringstream ss;
 	ss << priceCount++ << ", " << m_BB.getLowerValue() << ", " << price.getClose();
 	ss << ", " << m_BB.getMidValue() << ", " << m_BB.getUpperValue() << ", ";
-	if (m_SellSignalCount > 0)
+	if (isSellSignal())
 		ss << price.getClose();
 	ss << ", ";
-	if (m_BuySignalCount > 0)
+	if (isBuySignal())
 		ss << price.getClose();
+	ss << ", " << m_Gradient.getValue();
 	Log(ALGO, ss.str());
 }
 
 bool CrumbleStrategy::isBuySignal()
 {
-	return (m_BuySignalCount > 0);
+	bool bRet = (m_bBBBuyFlag && m_Gradient.isGoingUp());
+	return bRet;
 }
 
 bool CrumbleStrategy::isSellSignal()
 {
-	return (m_SellSignalCount > 0);
+	bool bRet = (m_bBBSellFlag && m_Gradient.isGoingDown());
+	return bRet;
 }

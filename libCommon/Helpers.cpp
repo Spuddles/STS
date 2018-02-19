@@ -1,6 +1,10 @@
 #include "Helpers.h"
 #include <fstream>
 #include <ctime>
+#include <thread>
+#include <chrono>
+
+using namespace STS;
 
 std::string Helpers::loadFile(const std::string &filename)
 {
@@ -24,6 +28,19 @@ std::string Helpers::getCurrentTime()
 	sprintf_s(&buffer[0], 14, "%02d:%02d:%02d", local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec);
 
 	return buffer;
+}
+
+void Helpers::getCurrentTime(int &hours, int &minutes, int &seconds)
+{
+	auto now = std::chrono::system_clock::now();
+	time_t tt;
+	tt = std::chrono::system_clock::to_time_t(now);
+	tm local_tm;
+	localtime_s(&local_tm, &tt);
+
+	hours = local_tm.tm_hour;
+	minutes = local_tm.tm_min;
+	seconds = local_tm.tm_sec;
 }
 
 uint64_t Helpers::getCurrentTimestamp()
@@ -52,4 +69,9 @@ std::string Helpers::convertTime(const uint64_t &timestamp)
 	sprintf_s(buffer, 64, "%04d%02d%02d-%02d:%02d:%02d.%04d", ts.tm_year + 1900, ts.tm_mon + 1, ts.tm_mday, ts.tm_hour, ts.tm_min, ts.tm_sec, milliseconds);
 
 	return std::string(buffer);
+}
+
+void Helpers::sleepMS(int milliseconds)
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }

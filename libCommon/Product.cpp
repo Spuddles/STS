@@ -1,5 +1,7 @@
 #include "Product.h"
 
+using namespace STS;
+
 Product::Product()
 {
 }
