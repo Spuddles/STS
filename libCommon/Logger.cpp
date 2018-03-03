@@ -102,7 +102,6 @@ std::string Logger::getLogLevelStr(LogLevel level)
 	case	POSITION:	return "POSITION";
 	case	SIGNAL:		return "SIGNAL";
 	case	ALGO:		return "ALGO";
-	case	EXCHANGE:	return "EXCHANGE";
 	default: return "UNKNOWN";
 	}
 }

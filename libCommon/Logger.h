@@ -21,8 +21,7 @@ namespace STS
 			TRADE,
 			POSITION,
 			SIGNAL,
-			ALGO,
-			EXCHANGE
+			ALGO
 		};
 
 		Logger();
