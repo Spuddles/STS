@@ -3,6 +3,7 @@
 #include "Price.h"
 #include "Product.h"
 #include <iostream>
+#include "Logger.h"
 
 using namespace STS;
 
@@ -27,21 +28,39 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 		Order o = m_vecOrders[i];
 		if (o.getProduct().getID() == id)
 		{
-			if (o.isBuy() && o.getPrice() > p.getLow() && o.getAmount() < p.getVolume())
+			if (o.isBuy() && o.getPrice() > p.getLow())
 			{
-				m_Portfolio.addFilledOrder(o);
-				//m_Portfolio.displayPosition();
-				m_vecOrders.erase(m_vecOrders.begin() + i);
-				--i;
+				if (o.getAmount() < p.getVolume())
+				{
+					m_Portfolio.addFilledOrder(o);
+					//m_Portfolio.displayPosition();
+					m_vecOrders.erase(m_vecOrders.begin() + i);
+					--i;
+				}
+				else
+				{
+					Log(EXCHANGE, "Not enough liquidity to fill order");
+				}
 			}
-			else if (o.isSell() && o.getPrice() < p.getHigh() && o.getAmount() < p.getVolume())
+			else if (o.isSell() && o.getPrice() < p.getHigh())
 			{
-				// Move this order to the filled collection
-				m_Portfolio.addFilledOrder(o);
-				//m_Portfolio.displayPosition();
-				m_vecOrders.erase(m_vecOrders.begin() + i);
-				-- i;
+				if (o.getAmount() < p.getVolume())
+				{
+					// Move this order to the filled collection
+					m_Portfolio.addFilledOrder(o);
+					//m_Portfolio.displayPosition();
+					m_vecOrders.erase(m_vecOrders.begin() + i);
+					--i;
+				}
+				else
+				{
+					Log(EXCHANGE, "Not enough liquidity to fill order");
+				}
 			}
+		}
+		if (!m_vecOrders.empty())
+		{
+			Log(EXCHANGE, "Orders left in exchange unfilled");
 		}
 	}
 }
