@@ -4,7 +4,7 @@
 	"symbol"        : "BNBBTC",
     "initialBTC"    : 0.1,
     "orderSize"     : 90,
-    "minOrderGap"   : 10,
+    "minOrderGap"   : 120,
 	"startDate"     : "-1",
     "endDate"       : "-1",
     "logFile"       : "Crumble-BNB.log",

@@ -65,13 +65,13 @@ void Portfolio::addFilledOrder(const Order &order)
 	{
 		// Increasing base, decreasing quote
 		m_mapCurrentPosition[prod.getBaseCoin()] += order.getAmount();
-		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*order.getPrice();
+		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*(order.getPrice()); // Handle transaction cost here
 	}
 	else
 	{
 		// Decreasing the base, increasing the quote
-		m_mapCurrentPosition[prod.getBaseCoin()] += order.getAmount(); // This will be a negative number hance the add (+)
-		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*order.getPrice();
+		m_mapCurrentPosition[prod.getBaseCoin()] += order.getAmount(); // This will be a negative number hence the add (+)
+		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*(order.getPrice()); // Handle transaction cost here
 	}
 	m_vecFilledOrders.push_back(order);
 }

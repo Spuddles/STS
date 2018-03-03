@@ -4,7 +4,7 @@
     "symbol"        : "NEOBTC",
     "initialBTC"    : 0.1,
     "orderSize"     : 7,
-    "minOrderGap"   : 10,
+    "minOrderGap"   : 120,
 	"startDate"     : "-1",
     "endDate"       : "-1",
     "logFile"       : "Crumble-NEO.log",

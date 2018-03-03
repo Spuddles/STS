@@ -3,12 +3,13 @@
 #include <iostream>
 #include <sstream>
 #include "Logger.h"
+#include <iomanip>
 
 using namespace STS;
 
-CrumbleStrategy::CrumbleStrategy(int intervalsBetweenOrders) :
-	m_BB(21, 2.0), m_Gradient(5), m_BuySignalCount(0), m_SellSignalCount(0),
-	m_intervalsBetweenOrders(intervalsBetweenOrders), m_countDown(0)
+CrumbleStrategy::CrumbleStrategy(double tradeTrigger, int minOrderGap) :
+	m_BB(21, 2.0), m_tradeTrigger(tradeTrigger),
+	m_minOrderGap(minOrderGap), m_eNextTrade(BUY), m_lastOrderTime(0L)
 {
 }
 
@@ -16,37 +17,90 @@ CrumbleStrategy::~CrumbleStrategy()
 {
 }
 
+double CrumbleStrategy::getBBValue(const Price &price)
+{
+	m_BB.updatePrice(price.getClose());
+	if (price.getClose() < m_BB.getLowerValue())
+	{
+		// Signal to buy
+		return 1.0;
+	}
+	else if (price.getClose() > m_BB.getUpperValue())
+	{
+		// Signal to sell
+		return 1.0;
+	}
+	return 0.0;
+}
+
+double CrumbleStrategy::getPriceMovementValue(const Price &price)
+{
+	static int count = 0;
+
+	if (m_tradePrice < 0.0)
+		m_tradePrice = price.getClose();
+
+
+	// If we haven't traded for 30 minutes, reset the last trade price
+	if ((price.getCloseTime() - m_lastOrderTime) / (60000 * 360))
+	{
+		m_tradePrice = price.getClose();
+		m_lastOrderTime = price.getCloseTime() - (60000 * 300);
+	}
+
+	double diff = (m_tradePrice - price.getClose()) / m_tradePrice;
+	return (diff / 0.05);
+}
+
+double CrumbleStrategy::getMinGapValue(const Price &price)
+{
+	uint64_t diff = price.getCloseTime() - m_lastOrderTime;
+
+	int minutes = (int)(diff / (1000 * 60));
+
+	if (minutes > m_minOrderGap)
+	{
+		return 1.0;
+	}
+	return 0.0;
+}
+
 void CrumbleStrategy::updatePrice(const Price &price)
 {
 	static unsigned int priceCount = 0;
-	m_BB.updatePrice(price.getClose());
-	m_Gradient.updatePrice(price.getClose());
 
-	if (--m_countDown > 0)
-	{
-		//m_bBBBuyFlag = false;
-		//m_bBBSellFlag = false;
-	}
-	else
-	{
-		// See if the price is lower than bound to signal a cheap price to buy
-		if (price.getClose() < m_BB.getLowerValue())
-		{
-			m_bBBBuyFlag = true;
-			m_bBBSellFlag = false;
-			m_countDown = 5;
-		}
+	double bbSignal = getBBValue(price);
+	double priceMoveSignal = getPriceMovementValue(price);
+	double minGapSignal = getMinGapValue(price);
 
-		// See if the price is higher than the upper bound to signal overpriced and good to sell
-		if (price.getClose() > m_BB.getUpperValue())
-		{
-			m_bBBSellFlag = true;
-			m_bBBBuyFlag = false;
-			m_countDown = 5;
-		}
-	}
+	double result = (bbSignal * minGapSignal);
 
 	std::stringstream ss;
+	ss << std::fixed << std::setprecision(6) << std::setw(5);
+	ss << priceCount << ", " << bbSignal << ", ";
+	ss << priceMoveSignal << ", " << minGapSignal;
+
+	Log(SIGNAL, ss.str());
+
+	m_bBBBuyFlag = false;
+	m_bBBSellFlag = false;
+
+	// See if the price is lower than bound to signal a cheap price to buy
+	if ( (result - priceMoveSignal)  > m_tradeTrigger && (m_eNextTrade == BUY || m_eNextTrade == EITHER))
+	{
+		m_bBBBuyFlag = true;
+		m_bBBSellFlag = false;
+	}
+
+	// See if the price is higher than the upper bound to signal overpriced and good to sell
+	if ( (result + priceMoveSignal) > m_tradeTrigger && (m_eNextTrade == SELL || m_eNextTrade == EITHER))
+	{
+		m_bBBSellFlag = true;
+		m_bBBBuyFlag = false;
+	}
+
+	ss = std::stringstream("");
+
 	ss << priceCount++ << ", " << m_BB.getLowerValue() << ", " << price.getClose();
 	ss << ", " << m_BB.getMidValue() << ", " << m_BB.getUpperValue() << ", ";
 	if (isSellSignal())
@@ -54,18 +108,40 @@ void CrumbleStrategy::updatePrice(const Price &price)
 	ss << ", ";
 	if (isBuySignal())
 		ss << price.getClose();
-	ss << ", " << m_Gradient.getValue();
 	Log(ALGO, ss.str());
 }
 
-bool CrumbleStrategy::isBuySignal()
+bool CrumbleStrategy::isBuySignal() const
 {
-	bool bRet = (m_bBBBuyFlag && m_Gradient.isGoingUp());
+	bool bRet = (m_bBBBuyFlag);
 	return bRet;
 }
 
-bool CrumbleStrategy::isSellSignal()
+bool CrumbleStrategy::isSellSignal() const
 {
-	bool bRet = (m_bBBSellFlag && m_Gradient.isGoingDown());
+	bool bRet = (m_bBBSellFlag);
 	return bRet;
+}
+
+void CrumbleStrategy::resetBuySell()
+{
+	m_eNextTrade = EITHER;
+}
+
+void CrumbleStrategy::bought(const Price &price)
+{
+//	std::cout << "bought" << std::endl;
+	Log(TRADE, "Buy order complete");
+	m_tradePrice = price.getClose();
+	m_eNextTrade = SELL;
+	m_lastOrderTime = price.getCloseTime();
+}
+
+void CrumbleStrategy::sold(const Price &price)
+{
+//	std::cout << "sold" << std::endl;
+	Log(TRADE, "Sell order complete");
+	m_tradePrice = price.getClose();
+	m_eNextTrade = BUY;
+	m_lastOrderTime = price.getCloseTime();
 }
