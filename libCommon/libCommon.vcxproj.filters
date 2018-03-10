@@ -54,6 +54,9 @@
     <ClCompile Include="AccountInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Params.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Price.h">
@@ -102,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AccountInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Params.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeParam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
