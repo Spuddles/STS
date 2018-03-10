@@ -43,14 +43,13 @@ namespace STS
 	bool RangeParam<T>::step()
 	{
 		m_count++;
-
-		return (((m_count * m_step) + m_start) <= m_end)
+		return (((m_count * m_step) + m_start) <= m_end);
 	}
 
 	template <class T>
 	size_t RangeParam<T>::getStepCount() const
 	{
-		T steps = (m_end - m_start) / m_step;
+		T steps = 1 + ((m_end - m_start) / m_step);
 
 		return static_cast<size_t>(steps);
 	}

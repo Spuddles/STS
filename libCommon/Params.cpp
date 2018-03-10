@@ -27,7 +27,6 @@ bool Params::load(const std::string &filename)
 		json &item = (*it);
 
 		std::string name = it.key();
-		std::cout << item.dump() << std::endl;
 
 		if (item.is_number_float())
 		{
@@ -47,9 +46,6 @@ bool Params::load(const std::string &filename)
 		else if (item.is_object())
 		{
 			// It's a range, handle it
-			std::cout << "Range: " << item.dump() << std::endl;
-
-
 			if (item.find("start") == item.end() ||
 				item.find("end") == item.end() ||
 				item.find("step") == item.end())
@@ -60,10 +56,10 @@ bool Params::load(const std::string &filename)
 			if (item["start"].is_number() ||
 				item["end"].is_number())
 			{
-				RangeParam<double> rp(item["start"], item["end"], item["step"]);
+				RangeParam<double> *rp = new RangeParam<double>(item["start"], item["end"], item["step"]);
 
 				m_vecRanges.push_back(rp);
-				m_mapDoubleRanges.insert(std::pair<std::string, RangeParam<double>>(name, rp));
+				m_mapDoubleRanges.insert(std::pair<std::string, RangeParam<double>*>(name, rp));
 			}
 		}
 	}
@@ -82,8 +78,8 @@ bool Params::getInt(const std::string &name, int &value) const
 	auto it2 = m_mapDoubleRanges.find(name);
 	if (it2 != m_mapDoubleRanges.end())
 	{
-		RangeParam<double> rp = it2->second;
-		value = static_cast<int>(rp.get());
+		RangeParam<double> *rp = it2->second;
+		value = static_cast<int>(rp->get());
 		return true;
 	}
 	return false;
@@ -101,8 +97,8 @@ bool Params::getDouble(const std::string &name, double &value) const
 	auto it2 = m_mapDoubleRanges.find(name);
 	if (it2 != m_mapDoubleRanges.end())
 	{
-		const RangeParam<double> rp = it2->second;
-		value = rp.get();
+		const RangeParam<double> *rp = it2->second;
+		value = rp->get();
 		return true;
 	}
 	return false;
@@ -124,7 +120,7 @@ size_t Params::getRangeCount() const
 	size_t count = 1;
 	for (auto r : m_vecRanges)
 	{
-		count *= r.getStepCount();
+		count *= r->getStepCount();
 	}
 	return count;
 }
@@ -132,5 +128,23 @@ size_t Params::getRangeCount() const
 bool Params::hasRanges() const
 {
 	return (!m_mapDoubleRanges.empty());
+}
+
+bool Params::next()
+{
+	for (size_t i = 0; i < m_vecRanges.size(); i++)
+	{
+		if (m_vecRanges[i]->step())
+		{
+			// We can move this item forward so that's good enough
+			return true;
+		}
+		else
+		{
+			// Current item has completed, reset and move to the next one
+			m_vecRanges[i]->reset();
+		}
+	}
+	return false;
 }
 

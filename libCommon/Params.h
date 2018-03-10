@@ -18,13 +18,14 @@ namespace STS
 
 		size_t	getRangeCount() const;
 		bool	hasRanges() const;
+		bool	next();
 
 	private:
 		std::map<std::string, int>					m_mapInts;
 		std::map<std::string, double>				m_mapDoubles;
-		std::map<std::string, RangeParam<double>>	m_mapDoubleRanges;
+		std::map<std::string, RangeParam<double>*>	m_mapDoubleRanges;
 		std::map<std::string, std::string>			m_mapStrings;
 
-		std::vector<RangeParam<double>>				m_vecRanges;
+		std::vector<RangeParam<double>*>			m_vecRanges;
 	};
 } // namespace STS
