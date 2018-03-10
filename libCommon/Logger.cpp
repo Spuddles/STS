@@ -20,6 +20,10 @@ Logger::~Logger()
 
 void Logger::setDefaultLog(const std::string &filename)
 {
+	if (m_defaultLogFile.is_open())
+	{
+		m_defaultLogFile.close();
+	}
 	m_defaultLogFile.open(filename, std::ios::out);
 }
 
@@ -103,6 +107,7 @@ std::string Logger::getLogLevelStr(LogLevel level)
 	case	SIGNAL:		return "SIGNAL";
 	case	ALGO:		return "ALGO";
 	case	EXCHANGE:	return "EXCHANGE";
+	case	PNL:		return "PNL";
 	default: return "UNKNOWN";
 	}
 }

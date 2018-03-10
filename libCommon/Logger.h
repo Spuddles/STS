@@ -22,7 +22,8 @@ namespace STS
 			POSITION,
 			SIGNAL,
 			ALGO,
-			EXCHANGE
+			EXCHANGE,
+			PNL
 		};
 
 		Logger();
