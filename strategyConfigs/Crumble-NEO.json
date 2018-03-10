@@ -1,13 +1,20 @@
 {
 	"strategyName"  : "CrumbleStrat",
-	"strategyFile"  : "Crumble.dll",
     "symbol"        : "NEOBTC",
     "initialBTC"    : 0.1,
-    "orderSize"     : 7,
-    "minOrderGap"   : 120,
-	"startDate"     : "-1",
-    "endDate"       : "-1",
-    "logFile"       : "Crumble-NEO.log",
-    "portfolioFile" : "portfolio.log",
-    "tradeFile"     : "trade.log"
+    "orderSize"     : 7.0,
+    "tradeTrigger"  :
+    {
+        "start" :   1.15,
+        "end"   :   1.85,
+        "step"  :   0.05
+    }, 
+	"startDate"     : "2018-01-01",
+    "endDate"       : "2018-12-31",
+    "minOrderGap"   : 
+    {
+        "start" :   10.0,
+        "end"   :   180.0,
+        "step"  :   10.0
+    }
 }

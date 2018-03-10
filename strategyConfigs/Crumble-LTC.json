@@ -9,7 +9,6 @@
         "end"   :   1.85,
         "step"  :   0.05
     }, 
-
 	"startDate"     : "2018-01-01",
     "endDate"       : "2018-12-31",
     "minOrderGap"   : 
