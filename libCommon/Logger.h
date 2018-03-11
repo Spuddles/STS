@@ -11,19 +11,19 @@ namespace STS
 	{
 	public:
 
-		enum LogLevel
+		enum LogLevel : unsigned int
 		{
-			DEBUG = 0,
-			NORM,
-			WARN,
-			ERROR,
-			CRITICAL,
-			TRADE,
-			POSITION,
-			SIGNAL,
-			ALGO,
-			EXCHANGE,
-			PNL
+			DEBUG		= 1,
+			NORM		= 2,
+			WARN		= 4,
+			ERROR		= 8,
+			CRITICAL	= 16,
+			TRADE		= 32,
+			POSITION	= 64,
+			SIGNAL		= 128,
+			ALGO		= 256,
+			EXCHANGE	= 512,
+			PNL			= 1024
 		};
 
 		Logger();
@@ -33,9 +33,9 @@ namespace STS
 		static void setDefaultLog(const std::string &filename);
 		static void	log(LogLevel level, const std::string &msg);
 		static void	setLogLevel(LogLevel level);
-		static void setTradeLog(const std::string &filename);
-		static void setPositionLog(const std::string &filename);
-		static void setSignalLog(const std::string &filename);
+		static void clearLogMask();
+		static void addLogMask(LogLevel level);
+		static void fillLogMask();
 
 	private:
 		static std::string	getLogLevelStr(LogLevel level);
@@ -44,8 +44,5 @@ namespace STS
 
 		// Store the file handles for the different log types
 		static std::ofstream	m_defaultLogFile;
-		static std::ofstream	m_tradeLogFile;
-		static std::ofstream	m_positionLogFile;
-		static std::ofstream	m_signalLogFile;
 	};
 } // namespace STS
