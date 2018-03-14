@@ -50,3 +50,6 @@
 # sqlite3
 *.sqlite
 *.sqlite-journal
+
+# GNUPlot generated files
+*.png
