@@ -49,9 +49,9 @@ void Logger::log(LogLevel level, const std::string &msg)
 	}
 }
 
-void Logger::setLogLevel(LogLevel level)
+void Logger::setLogLevel(int level)
 {
-	m_logLevel = level;
+	m_logLevel = static_cast<LogLevel>(level);
 }
 
 void Logger::clearLogMask()

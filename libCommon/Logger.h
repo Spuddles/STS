@@ -32,7 +32,7 @@ namespace STS
 
 		static void setDefaultLog(const std::string &filename);
 		static void	log(LogLevel level, const std::string &msg);
-		static void	setLogLevel(LogLevel level);
+		static void	setLogLevel(int level);
 		static void clearLogMask();
 		static void addLogMask(LogLevel level);
 		static void fillLogMask();
