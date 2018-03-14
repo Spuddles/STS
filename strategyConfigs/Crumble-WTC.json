@@ -1,6 +1,6 @@
 {
 	"strategyName"  : "CrumbleStrat",
-	"symbol"        : "LTCBTC",
+	"symbol"        : "WTCBTC",
     "initialBTC"    : 0.1,
     "tradeTrigger"  :
     {

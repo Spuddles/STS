@@ -1,6 +1,6 @@
 {
 	"strategyName"  : "CrumbleStrat",
-	"symbol"        : "LTCBTC",
+	"symbol"        : "XVGBTC",
     "initialBTC"    : 0.1,
     "tradeTrigger"  :
     {

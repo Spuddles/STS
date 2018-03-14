@@ -2,11 +2,10 @@
 	"strategyName"  : "CrumbleStrat",
 	"symbol"        : "IOTABTC",
     "initialBTC"    : 0.1,
-    "orderSize"     : 450.0,
     "tradeTrigger"  :
     {
-        "start" :   1.15,
-        "end"   :   1.85,
+        "start" :   1.05,
+        "end"   :   2.00,
         "step"  :   0.05
     }, 
 	"startDate"     : "2018-01-01",
@@ -14,7 +13,7 @@
     "minOrderGap"   : 
     {
         "start" :   10.0,
-        "end"   :   180.0,
+        "end"   :   600.0,
         "step"  :   10.0
     }
 }

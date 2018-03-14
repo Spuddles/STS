@@ -1,13 +1,19 @@
 {
 	"strategyName"  : "CrumbleStrat",
-	"strategyFile"  : "Crumble.dll",
-	"symbol"        : "BNBBTC",
+	"symbol"        : "BCCBTC",
     "initialBTC"    : 0.1,
-    "orderSize"     : 90,
-    "minOrderGap"   : 10,
-	"startDate"     : "-1",
-    "endDate"       : "-1",
-    "logFile"       : "Crumble-BNB.log",
-    "portfolioFile" : "portfolio.log",
-    "tradeFile"     : "trade.log"
+    "tradeTrigger"  :
+    {
+        "start" :   1.05,
+        "end"   :   2.00,
+        "step"  :   0.05
+    }, 
+	"startDate"     : "2018-01-01",
+    "endDate"       : "2018-12-31",
+    "minOrderGap"   : 
+    {
+        "start" :   10.0,
+        "end"   :   600.0,
+        "step"  :   10.0
+    }
 }
