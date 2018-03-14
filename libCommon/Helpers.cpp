@@ -3,6 +3,8 @@
 #include <ctime>
 #include <thread>
 #include <chrono>
+#include <stdlib.h>
+#include <assert.h>
 
 using namespace STS;
 
@@ -75,3 +77,29 @@ void Helpers::sleepMS(int milliseconds)
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
+
+/*
+ * Convert a string of type 2018-01-01 into a timestamp
+ */
+uint64_t Helpers::convertDateToTimestamp(const std::string &date)
+{
+	assert(date.size() == 10);
+
+	int year = atoi(date.substr(0, 4).c_str());
+	int month = atoi(date.substr(5, 2).c_str());
+	int day = atoi(date.substr(8, 2).c_str());
+
+	struct tm  tm;
+	time_t rawtime;
+	time(&rawtime);
+	localtime_s(&tm, &rawtime);
+	tm.tm_year = year - 1900;
+	tm.tm_mon = month - 1;
+	tm.tm_mday = day;
+	tm.tm_hour = 0;
+	tm.tm_min = 0;
+	tm.tm_sec = 0;
+	rawtime = mktime(&tm);
+	return rawtime * 1000LL;
+}
+

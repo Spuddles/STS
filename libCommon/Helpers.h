@@ -14,6 +14,7 @@ namespace STS
 		static bool			doesFileExist(const std::string &filename);
 		static std::string	convertTime(const uint64_t &timestamp);
 		static void			sleepMS(int milliseconds);
+		static uint64_t		convertDateToTimestamp(const std::string &date);
 
 	private:
 		Helpers() {};
