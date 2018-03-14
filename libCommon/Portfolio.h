@@ -12,7 +12,7 @@ namespace STS
 	class Portfolio
 	{
 	public:
-		Portfolio();
+				Portfolio(double transactionFee);
 		virtual ~Portfolio();
 
 		void	initialiseFunds(std::vector<Product> &vecProducts);
@@ -31,7 +31,8 @@ namespace STS
 		void	displayHistory();
 
 	private:
-		double							m_Price;
+		double							m_price;
+		double							m_transactionFee;
 		std::map<unsigned int, double>	m_mapCurrentPosition;
 		std::vector<Order>				m_vecFilledOrders;
 	};

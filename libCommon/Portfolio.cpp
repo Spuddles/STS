@@ -5,7 +5,8 @@
 
 using namespace STS;
 
-Portfolio::Portfolio()
+Portfolio::Portfolio(double transactionFee):
+	m_transactionFee(transactionFee)
 {
 }
 
@@ -29,7 +30,7 @@ void Portfolio::initialiseFunds(const Product &product)
 
 void Portfolio::updatePrice(const Price &price)
 {
-	m_Price = price.getClose();
+	m_price = price.getClose();
 }
 
 void Portfolio::addFunds(unsigned int id, double amount)
@@ -65,13 +66,13 @@ void Portfolio::addFilledOrder(const Order &order)
 	{
 		// Increasing base, decreasing quote
 		m_mapCurrentPosition[prod.getBaseCoin()] += order.getAmount();
-		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*(order.getPrice()); // Handle transaction cost here
+		m_mapCurrentPosition[prod.getQuoteCoin()] -= (order.getAmount()*(1.00+m_transactionFee))*order.getPrice();
 	}
 	else
 	{
 		// Decreasing the base, increasing the quote
 		m_mapCurrentPosition[prod.getBaseCoin()] += order.getAmount(); // This will be a negative number hence the add (+)
-		m_mapCurrentPosition[prod.getQuoteCoin()] -= order.getAmount()*(order.getPrice()); // Handle transaction cost here
+		m_mapCurrentPosition[prod.getQuoteCoin()] -= (order.getAmount()*(1.00-m_transactionFee))*order.getPrice();
 	}
 	m_vecFilledOrders.push_back(order);
 }
@@ -112,7 +113,7 @@ double Portfolio::getBTCValue()
 		}
 		else
 		{
-			totalValue += m_Price * amount;
+			totalValue += m_price * amount;
 		}
 	}
 	return totalValue;
