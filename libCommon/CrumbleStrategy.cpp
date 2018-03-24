@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Logger.h"
 #include <iomanip>
+#include "Helpers.h"
 
 using namespace STS;
 
@@ -100,9 +101,12 @@ void CrumbleStrategy::updatePrice(const Price &price)
 	}
 
 	ss = std::stringstream("");
-
-	ss << priceCount++ << ", " << m_BB.getLowerValue() << ", " << price.getClose();
-	ss << ", " << m_BB.getMidValue() << ", " << m_BB.getUpperValue() << ", ";
+	ss << std::setw(5) << priceCount++ << ", ";
+	ss << Helpers::convertTime(price.getCloseTime()) << ", ";
+	ss << m_BB.getLowerValue() << ", ";
+	ss << price.getClose() << ", ";
+	ss << m_BB.getMidValue() << ", ";
+	ss << m_BB.getUpperValue() << ", ";
 	if (isSellSignal())
 		ss << price.getClose();
 	ss << ", ";
