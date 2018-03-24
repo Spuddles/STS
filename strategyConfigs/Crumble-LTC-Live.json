@@ -1,0 +1,10 @@
+{
+	"strategyName"  : "CrumbleStrat",
+	"symbol"        : "LTCBTC",
+    "initialBTC"    : 0.1,
+    "tradeTrigger"  : 1.40, 
+	"startDate"     : "2018-01-01",
+    "endDate"       : "2018-12-31",
+    "minOrderGap"   : 250.0,
+    "logLevel"      : "DEBUG|WARN|ERROR|CRITICAL|TRADE|POSITION|SIGNAL|ALGO|EXCHANGE|PNL"
+}
