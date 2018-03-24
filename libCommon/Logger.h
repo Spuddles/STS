@@ -13,8 +13,9 @@ namespace STS
 
 		enum LogLevel : unsigned int
 		{
+			NONE		= 0,
 			DEBUG		= 1,
-			NORM		= 2,
+			NORMAL		= 2,
 			WARN		= 4,
 			ERROR		= 8,
 			CRITICAL	= 16,
@@ -33,14 +34,16 @@ namespace STS
 		static void setDefaultLog(const std::string &filename);
 		static void	log(LogLevel level, const std::string &msg);
 		static void	setLogLevel(int level);
+		static void	setLogLevel(const std::string &level);
 		static void clearLogMask();
 		static void addLogMask(LogLevel level);
 		static void fillLogMask();
 
 	private:
-		static std::string	getLogLevelStr(LogLevel level);
+		static std::string		getLogLevelStr(Logger::LogLevel level);
+		static Logger::LogLevel	getLogLevelFromStr(const std::string &logLevel);
 
-		static LogLevel		m_logLevel;
+		static LogLevel			m_logLevel;
 
 		// Store the file handles for the different log types
 		static std::ofstream	m_defaultLogFile;
