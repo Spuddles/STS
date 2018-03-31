@@ -15,7 +15,7 @@ BollingerBand::~BollingerBand()
 
 double BollingerBand::updatePrice(double price)
 {
-	double ma = m_MA.updatePrice(price);
+	double ma = m_MA.update(price);
 	m_Variance.updatePrice(price);
 	return ma;
 }

@@ -113,5 +113,8 @@
     <ClInclude Include="RangeParam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ISignal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

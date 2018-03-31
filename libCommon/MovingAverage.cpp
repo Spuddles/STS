@@ -12,21 +12,21 @@ MovingAverage::~MovingAverage()
 {
 }
 
-double MovingAverage::updatePrice(double price)
+double MovingAverage::update(double value)
 {
-	m_queuePrices.push_front(price);
+	m_queueValues.push_front(value);
 
-	if (m_queuePrices.size() > m_timePeriods)
+	if (m_queueValues.size() > m_timePeriods)
 	{
-		m_queuePrices.pop_back();
+		m_queueValues.pop_back();
 	}
 
 	double average = 0.0;
-	for (double p : m_queuePrices)
+	for (double p : m_queueValues)
 	{
 		average += p;
 	}
-	m_lastAverage = average / m_queuePrices.size();
+	m_lastAverage = average / m_queueValues.size();
 	return m_lastAverage;
 }
 
