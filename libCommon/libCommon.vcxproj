@@ -73,7 +73,7 @@
   <ItemGroup>
     <ClCompile Include="AccountInfo.cpp" />
     <ClCompile Include="BollingerBand.cpp" />
-    <ClCompile Include="CrumbleStrategy.cpp" />
+    <ClCompile Include="DynamicLoader.cpp" />
     <ClCompile Include="Exchange.cpp" />
     <ClCompile Include="Gradient.cpp" />
     <ClCompile Include="Helpers.cpp" />
@@ -90,7 +90,7 @@
     <ClInclude Include="AccountInfo.h" />
     <ClInclude Include="BollingerBand.h" />
     <ClInclude Include="Coin.h" />
-    <ClInclude Include="CrumbleStrategy.h" />
+    <ClInclude Include="DynamicLoader.h" />
     <ClInclude Include="Exchange.h" />
     <ClInclude Include="Gradient.h" />
     <ClInclude Include="Helpers.h" />

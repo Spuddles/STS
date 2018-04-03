@@ -15,9 +15,10 @@ namespace STS
 		};
 
 	public:
-		CrumbleStrategy(double tradeTrigger, int minOrderGap);
+				CrumbleStrategy();
 		virtual ~CrumbleStrategy();
 
+		void	initialise(const Params &p);
 		void	updatePrice(const Price &price);
 		bool	isBuySignal() const;
 		bool	isSellSignal() const;
@@ -45,4 +46,12 @@ namespace STS
 
 		uint64_t		m_lastOrderTime;
 	};
+
+	extern "C"
+	{
+		__declspec(dllexport) IStrategy* __stdcall instantiate()
+		{
+			return new CrumbleStrategy();
+		}
+	}
 } // namespace STS

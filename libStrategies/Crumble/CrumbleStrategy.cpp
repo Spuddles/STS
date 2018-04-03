@@ -1,5 +1,6 @@
 #include "CrumbleStrategy.h"
 #include "Price.h"
+#include "Params.h"
 #include <iostream>
 #include <sstream>
 #include "Logger.h"
@@ -8,9 +9,9 @@
 
 using namespace STS;
 
-CrumbleStrategy::CrumbleStrategy(double tradeTrigger, int minOrderGap) :
-	m_BB(21, 2.0), m_tradeTrigger(tradeTrigger),
-	m_minOrderGap(minOrderGap), m_eNextTrade(BUY), m_lastOrderTime(0L)
+CrumbleStrategy::CrumbleStrategy():
+	m_BB(21, 2.0), m_tradeTrigger(0.0),
+	m_minOrderGap(0), m_eNextTrade(BUY), m_lastOrderTime(0L)
 {
 }
 
@@ -64,6 +65,21 @@ double CrumbleStrategy::getMinGapValue(const Price &price)
 		return 1.0;
 	}
 	return 0.0;
+}
+
+void CrumbleStrategy::initialise(const Params &p)
+{
+	if (!p.getDouble("tradeTrigger", m_tradeTrigger))
+	{
+		Log(CRITICAL, "Failed to get tradeTrigger value");
+		return;
+	}
+
+	if (!p.getInt("minOrderGap", m_minOrderGap))
+	{
+		Log(CRITICAL, "Failed to get minOrderGap value");
+		return;
+	}
 }
 
 void CrumbleStrategy::updatePrice(const Price &price)
