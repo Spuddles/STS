@@ -376,9 +376,12 @@ bool DataBase::getProduct(unsigned int id, Product &product)
 {
 	bool		  success = false;
 	sqlite3_stmt *pStatement;
-	std::string sql = "SELECT id, active, baseCoin, decimalPlaces, matchingUnitType,"
-		"minQty, minTrade, quoteCoin, status, symbol, tickSize, withdrawFee "
-		"FROM tblProducts WHERE id=?";
+	std::string sql = "SELECT p.id, active, baseCoin, c.name as baseName, decimalPlaces, matchingUnitType,"
+		"minQty, minTrade, quoteCoin, c2.name as quoteName, status, symbol, tickSize, withdrawFee "
+		"FROM tblProducts p "
+		"JOIN tblCoins c ON p.baseCoin = c.id "
+		"JOIN tblCoins c2 ON p.quoteCoin = c2.id "
+		"WHERE p.id=?";
 
 	int retCode = sqlite3_prepare_v2(m_pSQLiteDB, sql.c_str(), (int)sql.size(), &pStatement, nullptr);
 	sqlite3_bind_int(pStatement, 1, id);
@@ -390,15 +393,17 @@ bool DataBase::getProduct(unsigned int id, Product &product)
 			product.setID(sqlite3_column_int(pStatement, 0));
 			product.setActive((sqlite3_column_int(pStatement, 1) == 1));
 			product.setBaseCoin(sqlite3_column_int(pStatement, 2));
-			product.setDecimalPlaces((uint8_t)sqlite3_column_int(pStatement, 3));
-			product.setMatchingUnitType(sqlite3_column_text(pStatement, 4));
-			product.setMinQty(sqlite3_column_int(pStatement, 5));
-			product.setMinTrade(sqlite3_column_int(pStatement, 6));
-			product.setQuoteCoin(sqlite3_column_int(pStatement, 7));
-			product.setStatus(sqlite3_column_text(pStatement, 8));
-			product.setSymbol(sqlite3_column_text(pStatement, 9));
-			product.setTickSize(sqlite3_column_int(pStatement, 10));
-			product.setWithdrawFee(sqlite3_column_double(pStatement, 11));
+			product.setBaseAssetName(sqlite3_column_text(pStatement, 3));
+			product.setDecimalPlaces((uint8_t)sqlite3_column_int(pStatement, 4));
+			product.setMatchingUnitType(sqlite3_column_text(pStatement, 5));
+			product.setMinQty(sqlite3_column_int(pStatement, 6));
+			product.setMinTrade(sqlite3_column_int(pStatement, 7));
+			product.setQuoteCoin(sqlite3_column_int(pStatement, 8));
+			product.setQuoteAssetName(sqlite3_column_text(pStatement, 9));
+			product.setStatus(sqlite3_column_text(pStatement, 10));
+			product.setSymbol(sqlite3_column_text(pStatement, 11));
+			product.setTickSize(sqlite3_column_int(pStatement, 12));
+			product.setWithdrawFee(sqlite3_column_double(pStatement, 13));
 
 			retCode = sqlite3_step(pStatement);
 		}
