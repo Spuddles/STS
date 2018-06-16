@@ -8,7 +8,6 @@
         "end"   :   2.00,
         "step"  :   0.05
     }, 
-
 	"startDate"     : "2018-01-01",
     "endDate"       : "2018-12-31",
     "minOrderGap"   : 
@@ -16,5 +15,6 @@
         "start" :   10.0,
         "end"   :   600.0,
         "step"  :   10.0
-    }
+    },
+    "logLevel"      : "PNL|CRITICAL"
 }

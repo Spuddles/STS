@@ -1,5 +1,6 @@
 {
-	"strategyName"  : "CrumbleStrat",
+    "strategyName"  : "CrumbleStrat",
+    "strategyDLL"   : "Crumble.dll",
 	"symbol"        : "LTCBTC",
     "initialBTC"    : 0.1,
     "tradeTrigger"  : 1.40, 
