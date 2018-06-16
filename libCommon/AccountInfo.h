@@ -21,7 +21,7 @@ namespace STS
 		AccountInfo();
 		virtual ~AccountInfo();
 
-		void	insertHolding(const std::string &coin, double &available, double &locked);
+		void	insertHolding(const std::string &coin, double available, double locked);
 		void	getAllHoldings(std::vector<Holding> &vecHoldings) const;
 		void	getActiveHoldings(std::vector<Holding> &vecHoldings) const;
 		bool	getHolding(const std::string &coin, Holding &holding) const;

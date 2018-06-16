@@ -1,5 +1,5 @@
 #include "Exchange.h"
-#include "Portfolio.h"
+#include "AccountInfo.h"
 #include "Price.h"
 #include "Product.h"
 #include <iostream>
@@ -7,8 +7,8 @@
 
 using namespace STS;
 
-Exchange::Exchange(Portfolio &p) :
-	m_Portfolio(p),
+Exchange::Exchange(AccountInfo &ai) :
+	m_AccountInfo(ai),
 	m_lastTradeTime(0LL)
 {
 }
@@ -32,8 +32,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 			{
 				if (o.getAmount() < p.getVolume())
 				{
-					m_Portfolio.addFilledOrder(o);
-					//m_Portfolio.displayPosition();
+//					m_Portfolio.addFilledOrder(o);
 					m_vecOrders.erase(m_vecOrders.begin() + i);
 					--i;
 				}
@@ -47,8 +46,7 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 				if (o.getAmount() < p.getVolume())
 				{
 					// Move this order to the filled collection
-					m_Portfolio.addFilledOrder(o);
-					//m_Portfolio.displayPosition();
+//					m_Portfolio.addFilledOrder(o);
 					m_vecOrders.erase(m_vecOrders.begin() + i);
 					--i;
 				}
@@ -67,11 +65,8 @@ void Exchange::updatePrice(unsigned int id, const Price &p)
 
 bool Exchange::placeLimitOrder(Product &product, double amount, const Price &price)
 {
-//	std::cout << "Placing order on " << product.getID() << " for " << amount << " at price " << price << std::endl;
 	m_vecOrders.push_back(Order(product, amount, price.getClose(), true));
-
 	m_lastTradeTime = price.getCloseTime();
-
 	return true;
 }
 

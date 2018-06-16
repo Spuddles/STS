@@ -6,14 +6,14 @@
 
 namespace STS
 {
-	class Portfolio;
+	class AccountInfo;
 	class Price;
 	class Product;
 
 	class Exchange
 	{
 	public:
-		Exchange(Portfolio &p);
+		Exchange(AccountInfo &ai);
 		virtual ~Exchange();
 
 		void	updatePrice(unsigned int id, const Price &p);
@@ -24,7 +24,7 @@ namespace STS
 		int		minutesSinceLastTrade(uint64_t now);
 
 	private:
-		Portfolio & m_Portfolio;
+		AccountInfo						&m_AccountInfo;
 		std::map<unsigned int, Price>	m_mapPrices;
 		std::vector<Order>				m_vecOrders;
 		uint64_t						m_lastTradeTime;

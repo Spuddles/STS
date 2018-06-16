@@ -13,7 +13,7 @@ AccountInfo::~AccountInfo()
 {
 }
 
-void AccountInfo::insertHolding(const std::string &coin, double &available, double &locked)
+void AccountInfo::insertHolding(const std::string &coin, double available, double locked)
 {
 	Holding h(coin, available, locked);
 	m_mapHoldings.insert(std::pair<std::string, Holding>(coin, h));
